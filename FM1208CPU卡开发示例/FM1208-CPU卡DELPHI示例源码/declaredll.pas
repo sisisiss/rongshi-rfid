@@ -1,0 +1,66 @@
+unit declaredll;
+
+interface
+     //CPU卡激活
+     function cpurequest(serial:pbyte; param:pbyte;cosver:pbyte;code:pbyte): Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //初始化函数，(ctrlword是否需要先清空卡,不需要清空的话，可以需输入卡密码，卡密码长度)ctrlword_0是否先清空卡，分配空间（字节数），
+     Function cpursinit(ctrlword:Byte;key:pbyte;keylen:Byte;customsize:integer):Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //增加文件（文件序号0~5，文件只读密码：长度,文件读写密码,长度，分配空间)
+     Function cpursfileadd(fileid:Byte;readonlykey:pbyte;readonlykeylen:Byte;writekey:pbyte;writekeylen:Byte;customsize:integer): Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //修改文件密码，修改后，请妥慎记住，否则该文件将无法再用
+     Function cpursfilekeychg(fileno:Byte;keytype:Byte;oldkey:pbyte;oldkeylen:Byte;newkey:pbyte;newkeylen:Byte): Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //读文件数据(文件序号,读写密码,密码长度,读取起始位置,读取长度,读出内容)
+     Function cpursfiledataread (fileno:Byte;keytype:Byte;key:pbyte;keylen:Byte;startaddr:integer;databuf:Pbyte;datalen:Integer):Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //写文件数据(文件序号,文件读写密码,密码长度,写入起始位置,写入长度，写入内容)
+     Function cpursfiledatawrite(fileno:Byte; keytype:Byte;key:pbyte; keylen:Byte;startaddr:Integer; databuf:Pbyte;datalen:Integer): Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //修改卡密码，卡密码和文件没有任何关系，卡密码只是用来清空卡，读和写文件是无效的。
+     Function cpurscardkeychg(oldkey:pbyte;oldkeylen:Byte;newkey:pbyte;newkeylen:Byte):Byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //强制清空卡，用cpursinit函数成功初始化过后，如果卡密码丢去了，可以尝试用以下的强制清空卡函数清空卡至出厂状态。
+     Function cpurscardclr(): Byte;stdcall;external 'OUR_MIFARE.dll';
+
+
+     //读卡函数声明
+     function piccreadex(ctrlword:byte;pserial:pbyte;area:byte;keyA1B0:byte;picckey:pbyte;piccdata0_2:pbyte):byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //写卡函数声明
+     function piccwriteex(ctrlword:byte;pserial:pbyte;area:byte;keyA1B0:byte;picckey:pbyte;piccdata0_2:pbyte):byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //驱动蜂鸣器函数声明
+     function pcdbeep(xms:integer):byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //修改单区密码函数声明
+     function piccchangesinglekey(ctrlword:byte;pserial:pbyte;area:byte;keyA1B0:byte;piccoldkey:pbyte;piccnewkey:pbyte):byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //修改单区密码改单区AB密码或访问控制位函数声明
+     function piccchangesinglekeyex(ctrlword:byte;serial:pbyte;area:byte;keyA1B0:byte;piccoldkey:pbyte;piccdata:pbyte):byte;stdcall;external 'OUR_MIFARE.dll';
+     //读出编号函数声明
+     function pcdgetdevicenumber(pdevicenumber:pbyte):byte;stdcall;external 'OUR_MIFARE.dll';
+
+     //发送显示
+      function lcddispfull(lcdstr:PChar):byte;stdcall;external 'OUR_MIFARE.dll';
+
+
+
+
+
+const
+   //以下控制字的含义请查看本公司网站提供的动态库说明
+    BLOCK0_EN = $01;  //读块0
+    BLOCK1_EN = $02;  //读块1
+    BLOCK2_EN = $04;   //读块2
+    NEEDSERIAL = $08;  //是否需要只对指定系列号的卡操作
+    EXTERNKEY = $10;   //是否使用外部密码
+    NEEDHALT = $20;   //是否休眠本卡
+
+implementation
+
+
+
+end.

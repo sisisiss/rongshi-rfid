@@ -1,0 +1,9 @@
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/Ntag2_Qt_Demo.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/install.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/Ntag2_Qt_Demo_autogen_timestamp_deps.dir
+H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/Ntag2_Qt_Demo_autogen.dir

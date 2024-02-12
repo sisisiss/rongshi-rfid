@@ -1,0 +1,9 @@
+﻿------ 已启动全部重新生成:  项目: iccardreader, 配置: Release x86 ------
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\Module1.vb(26) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\Module1.vb(27) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\Module1.vb(28) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\Module1.vb(29) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\Module1.vb(30) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\Module1.vb(31) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+  iccardreader -> E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\bin\x86\Release\iccardreader.exe
+========== 全部重新生成:  成功 1 个，失败 0 个，跳过 0 个 ==========

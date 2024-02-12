@@ -1,0 +1,1 @@
+OUR_MIFARE.dll 是windows操作系统动态库，libOURMIFARE.so是linux系统动态库，请将动态库拷贝到编译后的目录内。

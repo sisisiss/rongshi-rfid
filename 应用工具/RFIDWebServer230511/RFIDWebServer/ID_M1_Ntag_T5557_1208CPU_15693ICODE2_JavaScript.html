@@ -1,0 +1,1596 @@
+<html>
+
+<head>
+
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta name="ProgId" content="FrontPage.Editor.Document">
+    <title>USB IC、Ntag卡、ID、15693卡读卡器调用例程 通用插件版 V2.0</title>
+
+    <script language="javascript">
+
+        var iswsrun = false;
+        var ws;
+        var received_msg = "";
+
+        var mytimer;
+        var strls = "";
+        var errorno = "";
+
+        var wsUri = "ws://127.0.0.1:39189";   //端口号必须与RFIDWebServer端口一致
+
+        //控制字定义,控制字指定,控制字的含义请查看本公司网站提供的动态库说明
+
+        //javascript无法自定义常量, 你可以使用变量代替
+
+        var BLOCK0_EN = 0x01;//读第一块的(16个字节)
+        var BLOCK1_EN = 0x02;//读第二块的(16个字节)
+        var BLOCK2_EN = 0x04;//读第三块的(16个字节)
+        var NEEDSERIAL = 0x08;//仅读指定序列号的卡
+        var EXTERNKEY = 0x10;//用明码认证密码,产品开发完成后，建议把密码放到设备的只写区，然后用该区的密码后台认证，这样谁都不知道密码是多少，需要这方面支持请联系
+        var NEEDHALT = 0x20; //读/写完卡后立即休眠该卡，相当于这张卡不在感应区。要相重新操作该卡必要拿开卡再放上去
+
+        var NEWKEYR = 0x00;  //更改CPU卡文件只读密码
+        var NEWKEYWR = 0x01; //更改CPU卡文件读写密码
+        var OLDKEYR = 0x00;  //用CPU卡文件只读密码认证
+        var OLDKEYWR = 0x02; //用CPU卡文件读写密码认证
+
+        var myctrlword = 0;
+        var myareano = 0;
+        var authmode = 0;
+
+        var mypiccserial = "";
+        var mypicckey = "";
+        var piccdata0_2 = "";
+
+        var mypicckey_old = "";//旧密码
+        var mypicckey_new = "";//新密码
+
+        var myblockaddr = 1;//本次读卡的开始块号
+        var myblocksize = 8;//读8个块
+
+        var afi = "00";
+
+        function isUIntNum(val) {
+            var testval = /^\d+$/; // 非负整数
+            return (testval.test(val));
+        }
+
+        function isHex(val) {
+            var testval = /^(\d|[A-F]|[a-f])+$/; // 十六进制数
+            return (testval.test(val));
+        }
+
+        function ReadID() {
+            CardIDShowerdev.value = "";
+            var ReadIDComm = "idr_read,";
+            WebSocketRun(ReadIDComm);
+        }
+
+        function ReadIDOne() {
+            CardIDShowerdev.value = "";
+            var ReadIDComm = "idr_read_once,";
+            WebSocketRun(ReadIDComm);
+        }
+
+        function piccrequest() {
+            var RequestCardComm = "piccrequest,";
+            WebSocketRun(RequestCardComm);
+        }
+
+        function readcard() {
+            myctrlword = BLOCK0_EN + BLOCK1_EN + BLOCK2_EN + EXTERNKEY;    //指定控制字，十进制
+            myareano = 8;                     //指定为本次读取第8区，十进制
+            authmode = 1;                     //指定密码模式，十进制，大于0表示用A密码认证，推荐用A密码认证
+            mypiccserial = "00000000";          //指定本次操作的卡序列号，十六进制，未知时可指定为8个0
+            mypicckey = "FFFFFFFFFFFF";       //指定卡片密码，十六进制，FFFFFFFFFFFF为卡片厂家出厂密码
+
+            CardIDShower.value = "";
+
+            //用parseInt转为十六进制数
+            var ReadCardComm = "piccreadex," + myctrlword + "," + mypiccserial + "," + myareano + "," + authmode + "," + mypicckey;
+            WebSocketRun(ReadCardComm);
+        }
+
+        function writecard() {
+            myctrlword = BLOCK0_EN + BLOCK1_EN + BLOCK2_EN + EXTERNKEY;    //指定控制字，十进制
+            myareano = 8;                     //指定为本次读取第8区，十进制
+            authmode = 1;                     //指定密码模式，十进制，大于0表示用A密码认证，推荐用A密码认证
+            mypiccserial = "00000000";          //指定本次操作的卡序列号，十六进制，未知时可指定为8个0
+            mypicckey = "FFFFFFFFFFFF";       //指定卡片密码，十六进制，FFFFFFFFFFFF为卡片厂家出厂密码
+
+            //指定写卡内容，长度为48个字节，其中每个字节以两个字符表示为十六进制数
+            piccdata0_2 = "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F";
+
+            CardIDShower.value = "";
+            var WriteCardComm = "piccwriteex," + myctrlword + "," + mypiccserial + "," + myareano + "," + authmode + "," + mypicckey + "," + piccdata0_2;
+            WebSocketRun(WriteCardComm);
+        }
+
+        function writecarduid() {
+            myctrlword = BLOCK0_EN;      //指定控制字，十进制
+            authmode = 1;                //指定密码模式，十进制，大于0表示用A密码认证，推荐用A密码认证
+            mypiccserial = "00000000";   //指定本次操作的卡序列号，十六进制，未知时可指定为8个0
+            mypicckey = "FFFFFFFFFFFF";  //指定卡片密码，十六进制，FFFFFFFFFFFF为卡片厂家出厂密码
+
+            piccdata0 = "12345678000102030405060708090A0B";    //指定写卡内容，长度为16个字节，其中前面四个字节是卡号，第五字节必须为卡号的异或和校验字，后面为厂家标识
+
+            CardIDShower.value = "";
+            var WriteCardComm = "piccwriteserial," + myctrlword + "," + mypiccserial + "," + authmode + "," + mypicckey + "," + piccdata0;
+            WebSocketRun(WriteCardComm);
+        }
+
+
+        function changecardkeyex() {
+            myctrlword = EXTERNKEY;           //指定控制字
+            myareano = 8;                   //指定为本次读取第8区
+            authmode = 1;                   //批定密码模式，大于0表示用A密码认证，推荐用A密码认证
+            mypiccserial = "00000000";        //指定本次操作的卡序列号，未知时可指定为8个0
+            mypicckey_old = "FFFFFFFFFFFF"; //旧密码
+            mypicckey_new = "ffffffffffffFF078069FFFFFFFFFFFF03";//新密码，其中最前面的FFFFFFFFFFFF为A密码，中间的FF078069为访问控制位，后面的FFFFFFFFFFFF为B密码，03是表示同时更改A、B、密码权限访问字，为02表示密码权限访问字不更改，只改A、B密码，为00表示只改A密码
+
+            CardIDShower.value = "";
+            var ChangeKeyComm = "piccchangesinglekeyex," + myctrlword + "," + mypiccserial + "," + myareano + "," + authmode + "," + mypicckey_old + "," + mypicckey_new;
+            WebSocketRun(ChangeKeyComm);
+        }
+
+        function getdevicenumber() {
+            CardIDShowerdev.value = "";
+            WebSocketRun("pcdgetdevicenumber");
+        }
+
+        function IDgetdevicenumber() {
+            CardIDShowerdev.value = "";
+            WebSocketRun("IDpcdgetdevicenumber");
+        }
+
+        function beep() {
+            CardIDShowerdev.value = "";
+            WebSocketRun("pcdbeep,30");
+        }
+
+        function IDbeep() {
+            CardIDShowerdev.value = "";
+            WebSocketRun("idr_beep,30");
+        }
+
+        function clears1() {
+            CardIDShower.value = "";
+        }
+
+        function clearsntag() {
+            CardIDShowerNtag.value = "";
+        }
+
+        function clearsdev() {
+            CardIDShowerdev.value = "";
+        }
+
+        //Ntag21x测试
+        function readcard_ntag() {
+            CardIDShowerNtag.value = "";
+
+            strls = ntagserial.value.trim();      //指定序列号，未知卡序列号时可指定为14个0,因为NTAG21x卡是7个字节的卡序列号
+            if (strls == "") {
+                mypiccserial = "00000000000000";
+            }
+            else {
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "卡号输入错误\r\n";
+                    ntagserial.focus();
+                    ntagserial.select();
+                    return;
+                }
+                mypiccserial = strls;
+            }
+
+            //指定密码，NTAG21x卡密码为4个字节，卡出厂时密码功能不启用，这样无需密码也能读写卡
+            if (check3.checked) {
+                myctrlword = EXTERNKEY;              //指定控制字，无需密码为0，当需要密码时为EXTERNKEY;
+                strls = ntagkey3.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey3.focus();
+                    ntagkey3.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+            else {
+                mypicckey = "00000000";
+                myctrlword = 0;    //指定控制字，无需密码为0，当需要密码时为EXTERNKEY;
+            }
+
+            strls = ntagstartno.value.trim();   //起始页号
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "起始页号输入错误\r\n";
+                ntagstartno.focus();
+                ntagstartno.select();
+                return;
+            }
+            myblockaddr = parseInt(strls);//本次读卡的开始块号
+
+            //页数
+            strls = ntagpagenumber.value.trim();
+
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "页数输入错误\r\n";
+                ntagpagenumber.focus();
+                ntagpagenumber.select();
+                return;
+            }
+            myblocksize = parseInt(strls);//读4个块
+
+            var ReadNtagComm = "piccreadex_ntag," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + myblockaddr + "," + myblocksize;
+            WebSocketRun(ReadNtagComm);
+        }
+
+
+        function writecard_ntag() {
+            CardIDShowerNtag.value = "";
+
+            //指定序列号，未知卡序列号时可指定为14个0,因为NTAG21x卡是7个字节的卡序列号
+            strls = ntagserial.value.trim();
+            if (strls == "") {
+                mypiccserial = "00000000000000";
+            }
+            else {
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "卡号输入错误\r\n";
+                    ntagserial.focus();
+                    ntagserial.select();
+                    return;
+                }
+                mypiccserial = strls;
+            }
+
+            //指定密码，NTAG21x卡密码为4个字节，卡出厂时密码功能不启用，这样无需密码也能读写卡
+            if (check3.checked) {
+                //指定控制字
+                myctrlword = EXTERNKEY;//无需密码为0，当需要密码时为EXTERNKEY;
+                strls = ntagkey3.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey3.focus();
+                    ntagkey3.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+            else {
+                mypicckey = "00000000";
+                myctrlword = 0;   //指定控制字，无需密码为0，当需要密码时为EXTERNKEY;
+            }
+
+            //起始页号
+            strls = ntagstartno.value.trim();
+
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "起始页号输入错误\r\n";
+                ntagstartno.focus();
+                ntagstartno.select();
+                return;
+            }
+
+            myblockaddr = parseInt(strls);//本次读卡的开始块号
+
+            //页数
+            strls = ntagpagenumber.value.trim();
+
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "页数输入错误\r\n";
+                return;
+            }
+            myblocksize = parseInt(strls);
+
+            //数据
+            strls = ntagdata.value.trim();
+
+            if (!isHex(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "数据输入错误\r\n";
+                ntagdata.focus();
+                ntagdata.select();
+                return;
+            }
+
+            var WriteNtagComm = "piccwriteex_ntag," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + myblockaddr + "," + myblocksize + "," + strls;
+            WebSocketRun(WriteNtagComm);
+        }
+
+        function piccinit_ntag() {
+            CardIDShowerNtag.value = "";
+
+            //指定序列号，未知卡序列号时可指定为14个0,因为NTAG21x卡是7个字节的卡序列号
+            mypiccserial = "00000000000000";
+
+            //指定密码，NTAG21x卡密码为4个字节，卡出厂时密码功能不启用，这样无需密码也能读写卡
+            if (check1.checked) {
+                //指定控制字
+                myctrlword = EXTERNKEY;//无需密码为0，当需要密码时为EXTERNKEY;
+                strls = ntagkey1.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey1.focus();
+                    ntagkey1.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+            else {
+                mypicckey = "00000000";
+                myctrlword = 0;    //指定控制字，无需密码为0，当需要密码时为EXTERNKEY;
+            }
+
+            //数据准备
+            if (select1.selectedIndex == 1) {//开启密码保护功能，写保护功能生效，但读保护需要下面的数据设定
+                //取新密码
+                strls = ntagkey2.value.trim();
+
+                if (strls.length != 8) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "新密码长度必须为8位\r\n";
+                    ntagkey2.focus();
+                    ntagkey2.select();
+                    return;
+                }
+
+                strls = ntagkey2.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "新密码输入错误\r\n";
+                    ntagkey2.focus();
+                    ntagkey2.select();
+                    return;
+                }
+
+
+                strls1 = protectpageno.value.trim();//起始保护页号
+                if (!isUIntNum(strls1)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "起始保护页号输入错误\r\n";
+                    protectpageno.focus();
+                    protectpageno.select();
+                    return;
+                }
+
+                strls1 = "0" + parseInt(strls1).toString(16);
+                strls1 = strls1.substring(strls1.length - 2);
+
+                mypiccdata = "000000" + strls1;
+                myctrlword = myctrlword + 0x01; //更新控制字
+
+                //计数器
+                strls1 = keyerrortimes.value.trim();//允许密码错误次数
+                if (!isUIntNum(strls1)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "允许密码错误次数输入错误\r\n";
+                    protectpageno.focus();
+                    protectpageno.select();
+                    return;
+                }
+
+                i = parseInt(strls1);
+
+                i = i % 8;
+
+                if (check2.checked) {
+                    i = i + 128;
+                }
+                strls1 = "0" + i.toString(16);
+                strls1 = strls1.substring(strls1.length - 2);
+
+                mypiccdata = mypiccdata + strls1;
+
+                mypiccdata = mypiccdata + "000000";
+
+                mypiccdata = mypiccdata + strls;//新密码
+
+                //PACK
+                //PACK
+                //RFUI
+                //RFUI
+                mypiccdata = mypiccdata + "16160000";
+
+                myctrlword = myctrlword + 0x02; //更新控制字
+                myctrlword = myctrlword + 0x04; //更新控制字
+            }
+            else {
+                mypiccdata = "000000FF";//MIRROR,RFUI,MIRROR_PAGE,AUTH0
+
+                myctrlword = myctrlword + 0x01; //更新控制字
+
+                mypiccdata = mypiccdata + "000000000000000000000000";
+                myctrlword = myctrlword + 0x02; //更新控制字
+
+            }
+
+            var WriteNtagComm = "piccinit_ntag," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + mypiccdata;
+            WebSocketRun(WriteNtagComm);
+        }
+
+        function readcard_15693() {
+            CardIDShowerNtag.value = "";
+
+            myctrlword = 0;                        //读任何卡，不需指定卡号，读完后不静止该卡，可赋值NEEDSERIAL及NEEDHALT的组合模式，或为0
+            afi = "00";                            //16进制，一般取00
+            mypiccserial = "0000000000000000";     //指定序列号，未知卡序列号时可指定为18个0,因为15693卡是8个字节的卡序列号
+
+            strls = ntagstartno.value.trim();    //起始页号
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "起始页号输入错误\r\n";
+                ntagstartno.focus();
+                ntagstartno.select();
+                return;
+            }
+            myblockaddr = parseInt(strls);      //本次读卡的开始块号
+
+            strls = ntagpagenumber.value.trim();    //页数
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "页数输入错误\r\n";
+                ntagpagenumber.focus();
+                ntagpagenumber.select();
+                return;
+            }
+            myblocksize = parseInt(strls); //最大取值12
+
+            var Read15693Comm = "iso15693readex," + myctrlword + "," + afi + "," + myblockaddr + "," + myblocksize + "," + mypiccserial;
+            WebSocketRun(Read15693Comm);
+        }
+
+        //写15693卡
+        function writecard_15693() {
+            CardIDShowerNtag.value = "";
+
+            myctrlword = 0;                        //写任何卡，不需指定卡号，写完后不静止该卡，可赋值NEEDSERIAL及NEEDHALT的组合模式，或为0
+            afi = "00";                            //16进制，一般取00
+            mypiccserial = "0000000000000000";     //指定序列号，未知卡序列号时可指定为18个0,因为15693卡是8个字节的卡序列号
+
+
+            strls = ntagstartno.value.trim();      //起始页号
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "起始页号输入错误\r\n";
+                ntagstartno.focus();
+                ntagstartno.select();
+                return;
+            }
+            myblockaddr = parseInt(strls);          //本次读卡的开始块号
+
+            strls = ntagpagenumber.value.trim();    //页数
+            if (!isUIntNum(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "页数输入错误\r\n";
+                return;
+            }
+            myblocksize = parseInt(strls);
+
+            strls = ntagdata.value.trim();          //数据
+            if (!isHex(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "数据输入错误\r\n";
+                ntagdata.focus();
+                ntagdata.select();
+                return;
+            }
+
+            var WriteNtagComm = "iso15693writeex," + myctrlword + "," + afi + "," + myblockaddr + "," + myblocksize + "," + mypiccserial + "," + strls;
+            WebSocketRun(WriteNtagComm);
+        }
+
+        //T5557卡测试
+        function t5557_init() {
+            CardIDShowerNtag.value = "";
+
+            mypiccserial = "000000000000";      //读任意卡，t5557卡UID6个字节
+            mypicckey = "00000000";             //t5557卡密码为4个字节，卡出厂时密码功能不启用，无需密码也能读写卡
+            mynewkey = "00000000";
+            myctrlword = 0;                     //控制字，只对指定系列号的卡操作+1，需要用密码认证+2，写卡后要锁定配置块或数据块+4，启用本卡的密码功能+8，操作成功后重启卡片+16
+            myconfig = "00088028";              //出厂配置字，无密码保护功能，需了解更详细的配置信息请参看Vb.net 示例
+
+            if (check1.checked)                 //需要认证旧密码
+            {
+                myctrlword = myctrlword + 2;
+                strls = ntagkey1.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey1.focus();
+                    ntagkey1.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+
+            if (check2.checked)                       //新配置开启密码保护
+            {
+                myctrlword = myctrlword + 8;
+                strls = ntagkey2.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey2.focus();
+                    ntagkey2.select();
+                    return;
+                }
+                mynewkey = strls;
+                myconfig = "00088038";                 //启用密码保护的配置字，需了解更详细的配置信息请参看Vb.net 示例
+            }
+
+            var initt5557Comm = "t5557_init," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + myconfig + "," + mynewkey;
+            WebSocketRun(initt5557Comm);
+
+        }
+
+        function t5557_read() {
+            CardIDShowerNtag.value = "";
+
+            mypiccserial = "000000000000";      //读任意卡，t5557卡UID6个字节
+            mypicckey = "00000000";             //t5557卡密码为4个字节，卡出厂时密码功能不启用，无需密码也能读写卡
+            myctrlword = 0;                     //控制字，只对指定系列号的卡操作+1，需要用密码认证+2，写卡后要锁定配置块或数据块+4，启用本卡的密码功能+8，操作成功后重启卡片+16
+
+            //指定密码
+            if (check3.checked) {
+                myctrlword = myctrlword + 2;
+                strls = ntagkey3.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey3.focus();
+                    ntagkey3.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+
+            mypiccblockflag = "11111111";                       //总计8位二进制数，从右1到左分别表示T5557卡第0页 第0块到第7块的地址是否选取，为1表示选择读，为0 表示不读
+            mypiccblockflag = mypiccblockflag + "00011110";     //总计8位二进制数，最右边1位取0，从右2到左分别表示T5557卡第1页 第0块到第3块块地址是否选取，T5557第一页只有0、1两个块，T5567、T5577有0、1、2、3四个块
+            mypiccblockflag = t5557block.value.trim();
+
+            var Readt5557Comm = "t5557_read," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + mypiccblockflag;
+            WebSocketRun(Readt5557Comm);
+        }
+
+        function t5557_write() {
+            CardIDShowerNtag.value = "";
+
+            mypiccserial = "000000000000";      //写任意卡，t5557卡UID6个字节
+            mypicckey = "00000000";             //t5557卡密码为4个字节，卡出厂时密码功能不启用，无需密码也能读写卡
+            myctrlword = 0;                     //控制字，只对指定系列号的卡操作+1，需要用密码认证+2，写卡后要锁定配置块或数据块+4，启用本卡的密码功能+8，操作成功后重启卡片+16
+
+            //指定密码
+            if (check3.checked) {
+                myctrlword = myctrlword + 2;
+                strls = ntagkey3.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey3.focus();
+                    ntagkey3.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+
+            mypiccblockflag = "11111111";                       //总计8位二进制数，从右1到左分别表示T5557卡第0页 第0块到第7块的地址是否选取，为1表示选择读，为0 表示不读
+            mypiccblockflag = mypiccblockflag + "00011110";     //总计8位二进制数，最右边1位取0，从右2到左分别表示T5557卡第1页 第0块到第3块块地址是否选取，T5557第一页只有0、1两个块，T5567、T5577有0、1、2、3四个块
+            mypiccblockflag = t5557block.value.trim();
+
+            //数据
+            strls = ntagdata.value.trim();
+
+            if (!isHex(strls)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "数据输入错误\r\n";
+                ntagdata.focus();
+                ntagdata.select();
+                return;
+            }
+
+            var Writet5557Comm = "t5557_write," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + mypiccblockflag + "," + strls;
+            WebSocketRun(Writet5557Comm);
+        }
+
+        function t5557_changekey() {
+            CardIDShowerNtag.value = "";
+
+            mypiccserial = "000000000000";      //写任意卡，t5557卡UID6个字节
+            mypicckey = "00000000";             //t5557卡密码为4个字节，卡出厂时密码功能不启用，无需密码也能读写卡
+            myctrlword = 0;                     //控制字，只对指定系列号的卡操作+1，需要用密码认证+2，写卡后要锁定配置块或数据块+4，启用本卡的密码功能+8，操作成功后重启卡片+16
+
+            //指定密码
+            if (check3.checked) {
+                myctrlword = myctrlword + 2;
+                strls = ntagkey3.value.trim();
+                if (!isHex(strls)) {
+                    CardIDShowerNtag.value = CardIDShowerNtag.value + "密码输入错误\r\n";
+                    ntagkey3.focus();
+                    ntagkey3.select();
+                    return;
+                }
+                mypicckey = strls;
+            }
+
+            //数据
+            mynewkey = ntagkey2.value.trim();
+
+            if (!isHex(mynewkey)) {
+                CardIDShowerNtag.value = CardIDShowerNtag.value + "数据输入错误\r\n";
+                ntagkey2.focus();
+                ntagkey2.select();
+                return;
+            }
+
+            var Writet5557Comm = "t5557_changekey," + myctrlword + "," + mypiccserial + "," + mypicckey + "," + mynewkey;
+            WebSocketRun(Writet5557Comm);
+        }
+
+        function cpu_request() {
+            CardIDShower.value = "";
+
+            var CpuRequesComm = "cpurequest,";
+            WebSocketRun(CpuRequesComm);
+        }
+
+        function cpu_init() {
+            CardIDShower.value = "";
+
+            ClearCardYenNo = 1;                              //1表示先将卡片清空再初始化，0表示直接初始化
+            CardKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";    //16进制的卡密码，卡密码和文件没有任何关系，卡密码只是用来清空卡，读和写文件是无效的。一般不需要修改
+            KeyLen = 16;                                     //卡密码长度，一般不需要修改
+            spacesize = 256;                                 //设定本次应用空间大小,单位是字节
+
+            var CpuInitComm = "cpursinit," + ClearCardYenNo + "," + CardKey + "," + KeyLen + "," + spacesize;
+            WebSocketRun(CpuInitComm);
+        }
+
+        function cpu_fileadd_s() {
+            CardIDShower.value = "";
+
+            FileNo = 0;                                      //取值范围0-5，创建好的文件不能删除，只能重新初始化卡来清除所有文件
+            ReadKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";    //16进制的只读密码
+            ReadKeyLen = 16;                                 //只读密码长度，一般不需要修改
+            WriteKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";   //16进制的读写密码
+            WriteKeyLen = 16;                                //读写密码长度，一般不需要修改
+            spacesize = 256;                                 //文件空间大小,要小于初始化时定义的空间,单位是字节
+
+            var CpuFileAddComm = "cpursfileadd_s," + FileNo + "," + ReadKey + "," + ReadKeyLen + "," + WriteKey + "," + WriteKeyLen + "," + spacesize;
+            WebSocketRun(CpuFileAddComm);
+        }
+
+        function cpu_filekeychg() {
+            CardIDShower.value = "";
+
+            FileNo = 0;                                     //需要更改密码的文件号,取值范围0-5，
+            myctrlword = NEWKEYR;                           //NEWKEYR:0 更改CPU卡文件只读密码,  NEWKEYWR:1 更改CPU卡文件读写密码, 
+            myctrlword = myctrlword + OLDKEYR;              //OLDKEYR:0 用CPU卡文件只读密码认证,OLDKEYWR:2 用CPU卡文件读写密码认证
+            OldKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";    //16进制的旧密码
+            OldKeyLen = 16;                                 //旧密码长度，一般不需要修改
+            NewKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";    //16进制的新密码
+            NewKeyLen = 16;                                 //新密码长度，一般不需要修改
+
+            var CpuFileKeyChgComm = "cpursfilekeychg," + FileNo + "," + myctrlword + "," + OldKey + "," + OldKeyLen + "," + NewKey + "," + NewKeyLen;
+            WebSocketRun(CpuFileKeyChgComm);
+        }
+
+        function cpu_filedataread() {
+            CardIDShower.value = "";
+
+            FileNo = 0;                                     //需要读取数据的文件号,取值范围0-5，
+            myctrlword = OLDKEYR;                           //OLDKEYR:0 用CPU卡文件只读密码认证,OLDKEYWR:2 用CPU卡文件读写密码认证
+            FileKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";   //16进制的文件认证密码
+            FileKeyLen = 16;                                //密码长度，一般不需要修改
+            DataStart = 0;                                  //读文件的起始地址
+            DataLen = 100;                                  //读取数据长度     
+
+            var CpuFileDataReadComm = "cpursfiledataread," + FileNo + "," + myctrlword + "," + FileKey + "," + FileKeyLen + "," + DataStart + "," + DataLen;
+            WebSocketRun(CpuFileDataReadComm);
+        }
+
+        function cpu_filedatawrite_s() {
+            CardIDShower.value = "";
+
+            FileNo = 0;                                     //需要写入数据的文件号,取值范围0-5，
+            myctrlword = OLDKEYWR;                           //OLDKEYR:0 用CPU卡文件只读密码认证,OLDKEYWR:2 用CPU卡文件读写密码认证
+            FileKey = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";   //16进制的文件认证密码
+            FileKeyLen = 16;                                //密码长度，一般不需要修改
+            DataStart = 0;                                  //写文件的起始地址
+            DataInf = "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F";    //写入数据     
+            if (!isHex(DataInf)) {
+                CardIDShower.value =  "写入数据错误\r\n";
+                return;
+            }
+
+            var CpuFileDataWriteComm = "cpursfiledatawrite_s," + FileNo + "," + myctrlword + "," + FileKey + "," + FileKeyLen + "," + DataStart + "," + DataInf;
+            WebSocketRun(CpuFileDataWriteComm);
+        }
+
+        function cpu_cardclr() {
+            CardIDShower.value = "";
+            var CpuCardClrComm = "cpurscardclr,";
+            WebSocketRun(CpuCardClrComm);
+        }
+
+        window.onerror = function (e) {
+            alert("不好意思，出错了!");
+            return true;//屏蔽系统事件
+        }
+
+        function timeoutevent() {
+            ws.close();
+            CardIDShowerdev.value = "websockket返回超时";
+        }
+
+
+        //websockket数据处理
+        function WebSocketRev(evt) {
+            clearTimeout(mytimer);
+            received_msg = evt.data;
+            ws.close();
+
+            //在这里解析返回数据
+            //CardIDShowerdev.value = received_msg;
+
+            var strlist = received_msg.split(",");
+            if (strlist.length > 1) {
+                var dispstr = "";
+                switch (strlist[0]) {
+                    case "pcdbeep":
+                    case "idr_beep":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已执行蜂鸣响声操作！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + M1ErrInfo(strlist[1]);
+                        }
+                        CardIDShowerdev.value = dispstr;
+                        break;
+
+                    case "pcdgetdevicenumber":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已读取设备编号！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + M1ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "设备编号:" + strlist[2] + "\r\n";
+                        }
+                        CardIDShowerdev.value = dispstr;
+                        break;
+
+                    case "idr_read":
+                    case "idr_read_once":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已读取卡号！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + M1ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "原始16进制卡号:" + strlist[2] + "\r\n";
+                        }
+                        if (strlist.length > 3) {
+                            dispstr = dispstr + "转换08H10D卡号:" + strlist[3] + "\r\n";
+                        }
+                        CardIDShowerdev.value = dispstr;
+                        break;
+
+                    case "piccrequest":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已读取卡号！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + M1ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "原始16进制卡号:" + strlist[2] + "\r\n";
+                        }
+                        if (strlist.length > 3) {
+                            dispstr = dispstr + "转换08H10D卡号:" + strlist[3] + "\r\n";
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "piccreadex":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已读取卡内数据！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + M1ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "卡序列号:" + strlist[2] + "\r\n";
+                        }
+                        if (strlist.length > 3) {
+                            dispstr = dispstr + "卡内数据:" + strlist[3] + "\r\n";
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "piccreadex_ntag":
+                    case "iso15693readex":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已读取卡内数据！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + NtagErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "卡序列号:" + strlist[2] + "\r\n";
+                        }
+                        if (strlist.length > 3) {
+                            dispstr = dispstr + "卡内数据:" + strlist[3] + "\r\n";
+                        }
+                        CardIDShowerNtag.value = dispstr;
+                        break;
+
+                    case "piccwriteex":
+                    case "piccchangesinglekeyex":
+                    case "piccwriteserial":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，写卡成功！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + M1ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "卡序列号:" + strlist[2] + "\r\n";
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "piccwriteex_ntag":
+                    case "piccinit_ntag":
+                    case "iso15693writeex":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，写卡成功！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + NtagErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "卡序列号:" + strlist[2] + "\r\n";
+                        }
+                        CardIDShowerNtag.value = dispstr;
+                        break;
+
+                    case "t5557_read":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，已读取卡内数据！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + T5557ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "卡序列号:" + strlist[2] + "\r\n";
+                        }
+                        if (strlist.length > 3) {
+                            dispstr = dispstr + "卡内数据:" + strlist[3] + "\r\n";
+                        }
+                        if (strlist.length > 4) {
+                            dispstr = dispstr + "卡无线转输分频比:" + strlist[4] + "\r\n";
+                        }
+                        CardIDShowerNtag.value = dispstr;
+                        break;
+
+                    case "t5557_write":
+                    case "t5557_changekey":
+                    case "t5557_init":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，写卡成功！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + T5557ErrInfo(strlist[1]);
+                        }
+                        if (strlist.length > 2) {
+                            dispstr = dispstr + "卡序列号:" + strlist[2] + "\r\n";
+                        }
+                        CardIDShowerNtag.value = dispstr;
+                        break;
+
+                    case "cpurequest":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000" || strlist[1] == "ReturnCode:052") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，卡已激活！\r\n";
+                            dispstr = dispstr + "16进制卡号:" + strlist[2] + "\r\n";
+                            dispstr = dispstr + "10进制卡号:" + strlist[3] + "\r\n";
+                            dispstr = dispstr + "卡片参数:" + strlist[4] + "\r\n";
+                            dispstr = dispstr + "卡片版本:" + strlist[5] + "\r\n";
+                            dispstr = dispstr + "厂家代码:" + strlist[6] + "\r\n";
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + CPUErrInfo(strlist[1]);
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "cpursinit":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000" ) {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，卡片初始化成功！\r\n";
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + CPUErrInfo(strlist[1]);
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "cpursfileadd_s":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，文件创建成功！\r\n";
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + CPUErrInfo(strlist[1]);
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "cpursfilekeychg":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，文件密码修改成功！\r\n";
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + CPUErrInfo(strlist[1]);
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "cpursfiledataread":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，读文件数据成功！\r\n";
+                            dispstr = dispstr + "卡内数据:" + strlist[2] + "\r\n";
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + CPUErrInfo(strlist[1]);
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "cpursfiledatawrite_s":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，写文件成功！\r\n";
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + CPUErrInfo(strlist[1]);
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+
+                    case "cpurscardclr":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1];
+                            dispstr = dispstr + "，强制清空卡成功！\r\n";
+                        } else {
+                            if (strlist[1] == "ReturnCode:064") {
+                                dispstr = dispstr + "操作结果:" + strlist[1];
+                                dispstr = dispstr + "，此卡未经过cpursinit函数成功初始化！\r\n";
+                            }
+                            else {
+                                dispstr = dispstr + "操作结果:" + strlist[1];
+                                dispstr = dispstr + CPUErrInfo(strlist[1]);
+                            }
+                        }
+                        CardIDShower.value = dispstr;
+                        break;
+                }
+            }
+        }
+
+
+        function CPUErrInfo(errcode) {
+            var errstr = "";
+            switch (errcode) {
+                case "ReturnCode:003":
+                    errstr = "，请先激活CPU卡再继续操作！";
+                    break;
+                case "ReturnCode:008":
+                    errstr = "，未寻到卡，请将卡放到发卡器的感应区！";
+                    break;
+                case "ReturnCode:050":
+                    errstr = "，RATS错误，厂家调试代码，用户不需理会！";
+                    break;
+                case "ReturnCode:051":
+                    errstr = "，PPS错误，厂家调试代码，用户不需理会！";
+                    break;
+                case "ReturnCode:052":
+                    errstr = "，已进入了14443-4协议状态，可进行CPU卡功能所有操作！";
+                    break;
+                case "ReturnCode:053":
+                    errstr = "，未寻到卡，请将卡放到发卡器的感应区！";
+                    break;
+                case "ReturnCode:054":
+                    errstr = "，CPU卡功能通讯错误！";
+                    break;
+                case "ReturnCode:055":
+                    errstr = "，发送ACK指令给卡，让卡接着发送数据回来！";
+                    break;
+                case "ReturnCode:056":
+                    errstr = "，清空根目录失败！";
+                    break;
+                case "ReturnCode:057":
+                    errstr = "，卡片不支持此功能！";
+                    break;
+                case "ReturnCode:058":
+                    errstr = "，卡片初始化失败！";
+                    break;
+                case "ReturnCode:059":
+                    errstr = "，分配的空间不足！";
+                    break;
+                case "ReturnCode:060":
+                    errstr = "，本次操作的实体已存在！";
+                    break;
+                case "ReturnCode:061":
+                    errstr = "，无足够空间！";
+                    break;
+                case "ReturnCode:062":
+                    errstr = "，文件不存在！";
+                    break;
+                case "ReturnCode:063":
+                    errstr = "，权限不足,有可能是用只读密码认证，导致无法更改读写密码或无法写文件！";
+                    break;
+                case "ReturnCode:064":
+                    errstr = "，密码不存在，或密钥文件未创建！";
+                    break;
+                case "ReturnCode:065":
+                    errstr = "，传送长度错误！";
+                    break;
+                case "ReturnCode:066":
+                    errstr = "，接收长度错误，即接收的数据长度指定过大！";
+                    break;
+                case "ReturnCode:067":
+                    errstr = "，功能不支持、或卡中无MF、或卡片已锁定！";
+                    break;
+                case "ReturnCode:068":
+                    errstr = "，密码认证错识次数过多，该密码已被锁死！";
+                    break;
+                case "ReturnCode:070":
+                case "ReturnCode:071":
+                case "ReturnCode:072":
+                case "ReturnCode:073":
+                case "ReturnCode:074":
+                case "ReturnCode:075":
+                case "ReturnCode:076":
+                case "ReturnCode:077":
+                case "ReturnCode:078":
+                case "ReturnCode:079":
+                case "ReturnCode:080":
+                case "ReturnCode:081":
+                case "ReturnCode:082":
+                case "ReturnCode:083":
+                case "ReturnCode:084":
+                case "ReturnCode:085":
+                    var lastnum = errcode.slice(-2) - 70;
+                    errstr = "，密码错误，剩余次数为：" + lastnum + "，如剩余次数为0，该密码将锁死，无法再认证！";
+                    break;
+                case "ReturnCode:086":
+                    errstr = "，更改后的密码长度必须和创建时的长度一致！";
+                    break;
+                case "ReturnCode:087":
+                    errstr = "，应用目录不存在！";
+                    break;
+                case "ReturnCode:088":
+                    errstr = "，应用文件不存在！";
+                    break;
+                case "ReturnCode:089":
+                    errstr = "，文件号不能超过 5 ！";
+                    break;
+                case "ReturnCode:090":
+                    errstr = "，读取文件时返回的长度不足，数据可能不正确！";
+                    break;
+                case "ReturnCode:091":
+                    errstr = "，一次读文件的长度不能超过255 ！";
+                    break;
+                case "ReturnCode:092":
+                    errstr = "，一次写文件的长度不能超过247 ！";
+                    break;
+                default:
+                    errstr = "，未知的错误！";
+            }
+            return errstr;
+        }
+
+        function M1ErrInfo(errcode) {
+            var errstr = "";
+            switch (errcode) {
+                case "ReturnCode:001":
+                    errstr = "，读写扇区数据失败！";
+                    break;
+                case "ReturnCode:002":
+                    errstr = "，读写1、2块数据失败！";
+                    break;
+                case "ReturnCode:003":
+                    errstr = "，读写第2块数据失败！";
+                    break;
+                case "ReturnCode:008":
+                    errstr = "，未寻到卡，请将卡放到发卡器的感应区！";
+                    break;
+                case "ReturnCode:009":
+                    errstr = "，有多张卡在感应区，寻卡过程中防冲突失败，读卡失败！";
+                    break;
+                case "ReturnCode:010":
+                    errstr = "，该卡可能已被休眠，无法选中卡片！";
+                    break;
+                case "ReturnCode:011":
+                    errstr = "，密码装载失败！";
+                    break;
+                case "ReturnCode:012":
+                    errstr = "，卡密码认证失败！";
+                    break;
+                case "ReturnCode:013":
+                    errstr = "，读块操作失败，原因是刷卡太快或本块所对应的区还没通过密码认证！";
+                    break;
+                case "ReturnCode:014":
+                    errstr = "，写块操作失败，原因是刷卡太快或本块所对应的区还没通过密码认证！";
+                    break;
+                case "ReturnCode:018":
+                    errstr = "，写块操作失败！";
+                    break;
+                case "ReturnCode:021":
+                    errstr = "，没有动态库！";
+                    break;
+                case "ReturnCode:022":
+                    errstr = "，动态库或驱动程序异常！";
+                    break;
+                case "ReturnCode:023":
+                    errstr = "，驱动程序错误或发卡器未连接！";
+                    break;
+                case "ReturnCode:024":
+                    errstr = "，操作超时，一般是动态库没有反映！";
+                    break;
+                case "ReturnCode:025":
+                    errstr = "，发送字数不够！";
+                    break;
+                case "ReturnCode:026":
+                    errstr = "，发送的CRC错！";
+                    break;
+                case "ReturnCode:027":
+                    errstr = "，接收的字数不够！";
+                    break;
+                case "ReturnCode:028":
+                    errstr = "，接收的CRC错！";
+                    break;
+                case "ReturnCode:029":
+                    errstr = "，函数输入参数格式错误！";
+                    break;
+                case "ReturnCode:444":
+                    errstr = "，RFIDWebServer系统文件错误！";
+                    break;
+                default:
+                    errstr = "，未知的错误！";
+            }
+            return errstr;
+        }
+
+        function NtagErrInfo(errcode) {
+            var errstr = "";
+            switch (errcode) {
+                case "ReturnCode:008":
+                case "ReturnCode:009":
+                case "ReturnCode:010":
+                    errstr = "，未寻到卡，请将卡放到发卡器的感应区！";
+                    break;
+                case "ReturnCode:011":
+                case "ReturnCode:012":
+                    errstr = "，卡密码认证失败！";
+                    break;
+                case "ReturnCode:013":
+                    errstr = "，读卡失败，可能需要验证密码！";
+                    break;
+                case "ReturnCode:014":
+                    errstr = "，写卡失败，可能需要验证密码！";
+                    break;
+                case "ReturnCode:021":
+                    errstr = "，没有动态库！";
+                    break;
+                case "ReturnCode:022":
+                    errstr = "，动态库或驱动程序异常！";
+                    break;
+                case "ReturnCode:023":
+                    errstr = "，驱动程序错误或发卡器未连接！";
+                    break;
+                case "ReturnCode:024":
+                    errstr = "，操作超时，一般是动态库没有反映！";
+                    break;
+                case "ReturnCode:025":
+                    errstr = "，发送字数不够！";
+                    break;
+                case "ReturnCode:026":
+                    errstr = "，发送的CRC错！";
+                    break;
+                case "ReturnCode:027":
+                    errstr = "，接收的字数不够！";
+                    break;
+                case "ReturnCode:028":
+                    errstr = "，接收的CRC错！";
+                    break;
+                case "ReturnCode:029":
+                    errstr = "，函数输入参数格式错误！";
+                    break;
+                case "ReturnCode:444":
+                    errstr = "，RFIDWebServer系统文件错误！";
+                    break;
+                default:
+                    errstr = "，未知的错误！";
+            }
+            return errstr;
+        }
+
+
+        function T5557ErrInfo(errcode) {
+            var errstr = "";
+            switch (errcode) {
+                case "ReturnCode:001":
+                    errstr = "，写入配置的值不正确，请重新写入！";
+                    break;
+                case "ReturnCode:002":
+                    errstr = "，本卡尚未开启密码功能，函数myctrlword中无需加2！";
+                    break;
+                case "ReturnCode:003":
+                    errstr = "，需要密码才能读卡，函数myctrlword要加2！";
+                    break;
+                case "ReturnCode:005":
+                    errstr = "，密码错误！";
+                    break;
+                case "ReturnCode:008":
+                    errstr = "，未寻到卡，请将卡放到发卡器的感应区！";
+                    break;
+                case "ReturnCode:022":
+                    errstr = "，动态库或驱动程序异常！";
+                    break;
+                case "ReturnCode:023":
+                    errstr = "，驱动程序错误或发卡器未连接！";
+                    break;
+                case "ReturnCode:024":
+                    errstr = "，操作超时，一般是动态库没有反映！";
+                    break;
+                case "ReturnCode:025":
+                    errstr = "，发送字数不够！";
+                    break;
+                case "ReturnCode:026":
+                    errstr = "，发送的CRC错！";
+                    break;
+                case "ReturnCode:027":
+                    errstr = "，接收的字数不够！";
+                    break;
+                case "ReturnCode:028":
+                    errstr = "，接收的CRC错！";
+                    break;
+                case "ReturnCode:029":
+                    errstr = "，函数输入参数格式错误！";
+                    break;
+                case "ReturnCode:444":
+                    errstr = "，RFIDWebServer系统文件错误！";
+                    break;
+                default:
+                    errstr = "，未知的错误！";
+            }
+            return errstr;
+        }
+
+        function WebSocketRun(sendinfo) {
+            iswsrun = false;
+
+            try {
+                if ("WebSocket" in window) {
+                    ws = new WebSocket(wsUri);
+                }
+                else if ("MozWebSocket" in window) {
+                    ws = new MozWebSocket(wsUri);
+                }
+                else {
+                    received_msg = "您的浏览器不支持WebSocket，请选用支持WebSocket的浏览器！";
+                    return;
+                }
+
+                clearTimeout(mytimer);
+
+                ws.onopen = function (evt) {
+                    ws.send(sendinfo);
+                    iswsrun = true;
+
+                    mytimer = setTimeout("timeoutevent()", 2000);
+                };
+
+                ws.onmessage = WebSocketRev;
+
+                ws.onerror = function (e) {
+                    if (iswsrun != true) {
+                        received_msg = "请先在当前电脑下载>安装>运行我们的服务程序......";
+                        window.open("http://www.icmcu.com/ICID15693-02V2test/RFIDWebServerSetup.exe", "top");//打开新窗口
+
+                        alert("请先下载>安装>运行我们的服务程序，再刷新本页面......");
+                    }
+                };
+            }
+            catch (ex) {
+                if (iswsrun != true) {
+                    received_msg = "请先在当前电脑下载>安装>运行我们的服务程序......";
+                    window.open("http://www.icmcu.com/ICID15693-02V2test/RFIDWebServerSetup.exe", "top");//打开新窗口
+
+                    alert("请先下载>安装>运行我们的服务程序，再刷新本页面......");
+                }
+            }
+        }
+
+
+    </script>
+
+    <style type="text/css">
+        input {
+            float: left;
+            margin-right: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+        }
+
+            input[type="text"]:focus {
+                border: 2px solid #ff9800;
+            }
+    </style>
+
+</head>
+<body>
+    <div style="width:100%">
+        <div style=" float:left; COLOR: #FFF;BACKGROUND-COLOR: #FF9800;padding: 2px 5px;">
+            设备操作
+        </div>
+        <div style="width:100%; float:left;">
+            <div style="border-top: 2px solid #ff9800;padding: 2px 5px;color: #2196f3;">
+                <span>提示：</span>
+                <br />
+                <textarea rows="4" cols="98" id="CardIDShowerdev" name="S3" style="width:100%;overflow:auto;"></textarea>
+                <input type="button" value="IC读写器蜂鸣器响" onclick="beep()">
+                <input type="button" value="IC读写器读取读写器硬件号" onclick="getdevicenumber()">
+
+                <input type="button" value="清空提示" onclick="clearsdev()">
+                <br />
+            </div>
+        </div>
+        <div style="width:100%; float:left;">
+            <div style="border-top: 2px solid #ff9800;padding: 2px 5px;color: #2196f3;">
+                <input type="button" value="ID读卡器蜂鸣器响" onclick="IDbeep()">
+                <input type="button" value="ID读卡器读取读写器硬件号" onclick="IDgetdevicenumber()">
+                <input type="button" value="连续读取ID卡号" onclick="ReadID()">
+                <input type="button" value="需重新取放卡才能第二次读取ID卡号" onclick="ReadIDOne()">
+            </div>
+        </div>
+        <div style=" float:left; COLOR: #FFF;BACKGROUND-COLOR: #FF9800;padding: 2px 5px;">
+            M1卡、FM1208CPU卡测试
+        </div>
+        <div style="width:100%; float:left;">
+            <div style="border-top: 2px solid #ff9800;padding: 2px 5px;color: #2196f3;">
+                <span>提示：</span>
+                <br />
+                <textarea rows="4" cols="98" id="CardIDShower" name="S1" style="width: 100%;overflow:auto;"></textarea>
+
+                <br />
+                <input type="button" value=" 寻M1卡获取卡号 " onclick="piccrequest()" />
+                <input type="button" value=" 读M1卡扇区数据 " onclick="readcard()" />
+                <input type="button" value=" 写M1卡扇区数据 " onclick="writecard()" />
+                <input type="button" value="更改M1卡密码" onclick="changecardkeyex()" />
+                <input type="button" value="写卡UID号为12345678" onclick="writecarduid()" />
+                <input type="button" value="清空提示" onclick="clears1()" />
+                <br />
+
+                <div style="width:100%; float:left;">
+                    <div style="border-top: 2px solid #ff9800;padding: 2px 5px;color: #2196f3;">
+                        <input type="button" value="激活CPU卡" onclick="cpu_request()">
+                        <input type="button" value="初始化CPU卡" onclick="cpu_init()">
+                        <input type="button" value="创建易写文件" onclick="cpu_fileadd_s()">
+                        <input type="button" value="修改文件密码" onclick="cpu_filekeychg()">
+                        <input type="button" value="读CPU卡文件数据" onclick="cpu_filedataread()">
+                        <input type="button" value="易写CPU卡文件数据" onclick="cpu_filedatawrite_s()">
+                        <input type="button" value="强制清空卡" onclick="cpu_cardclr()">
+                    </div>
+
+                </div>
+            </div>
+
+            <div style=" float:left; COLOR: #FFF;BACKGROUND-COLOR: #FF9800;padding: 2px 5px;">
+                Ntag2x卡、15693卡、T5557卡测试
+            </div>
+
+            <div style="width:100%; float:left;">
+                <div style="border-top: 2px solid #ff9800;padding: 2px 5px;color: #2196f3;">
+
+                    <span>提示：</span>
+                    <br>
+                    <textarea rows="4" cols="98" id="CardIDShowerNtag" name="S2" style="width: 100%;overflow:auto;"></textarea>
+                    <br />
+                    <input type="button" value=" 设置Ntag2x卡密码及保护机制(写错卡作废，千万小心) " onclick="piccinit_ntag()">
+                    <input type="button" value=" 设置T5557卡密码及保护机制(写错卡作废，千万小心) " onclick="t5557_init()">
+                    <input type="button" value="清空提示" onclick="clearsntag()">
+                    <br />
+                    <div style="width:100%; float:left;">
+
+                        <label>
+                            <input id="check1" type="checkbox" style="float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                            <span style="vertical-align:middle">需要认证卡密码才能继续操作，密码：</span>
+                        </label>
+
+                        <input type="text" id="ntagkey1" value="12345678" style="width:6em;float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                        <br />
+                        <select id="select1" style="width:12em;">
+                            <option>取消密码保护功能</option>
+                            <option>开启密码保护功能</option>
+                        </select>
+                        <br />
+                        <label>
+                            <span style="vertical-align:middle">从</span>
+                            <input type="text" id="protectpageno" value="144" style="width:2em;float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                            <span style="vertical-align:middle">页开始有密码保护</span>
+
+                        </label>
+
+                        <label>
+                            <input id="check2" type="checkbox" style="float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                            <span style="vertical-align:middle">开启读操作密码保护</span>
+                        </label>
+
+                        <br />
+
+                        <span style="vertical-align:middle">新密码：</span>
+                        <input type="text" id="ntagkey2" value="12345678" style="width:6em;float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                        <span style="vertical-align:middle">允许密码错误次数（0为不限次）：</span>
+                        <input type="text" id="keyerrortimes" value="0" style="width:2em;float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+
+
+                        <div style="width:100%; float:left;border-top: 3px solid #eaebdc;"></div>
+                        <br />
+                        <label>
+                            <input id="check3" type="checkbox" style="float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                            <span style="vertical-align:middle">需要认证卡密码才能继续操作，密码：</span>
+                        </label>
+                        <input type="text" id="ntagkey3" value="12345678" style="width:6em;float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+
+                        <table style="color:#e58800;width:100%;table-layout:fixed;">
+                            <colgroup>
+                                <col width="85">
+                                <col width="50">
+                                <col width="50">
+                                <col width="auto">
+                            </colgroup>
+                            <tr>
+                                <td style="text-align:right">
+                                    <span style="vertical-align:middle">起始页号：</span>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="ntagstartno" value="8" style="width:2em;float:none;margin-right:0px;padding:0px;vertical-align:middle" />
+                                </td>
+                                <td>
+                                    <span style="vertical-align:middle">卡号：</span>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="ntagserial" value="" style="max-width: 16em;width:100%;float:none;margin-right:0px;padding:0px;vertical-align:middle;overflow:auto;">
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td style="text-align:right">
+                                    <span style="vertical-align:middle">页数：</span>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="ntagpagenumber" value="4" style="width:2em;float:none;margin-right:0px;padding:0px;vertical-align:middle;" />
+                                </td>
+                                <td>
+                                    <span style="vertical-align:middle;">数据：</span>
+                                </td>
+
+                                <td>
+
+                                    <input type="text" id="ntagdata" value="" style="width:100%;float:none;margin-right:0px;padding:0px;vertical-align:middle;overflow:auto; ">
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <input type="button" value=" 轻松读Ntag2x卡，最多一次12页 " onclick="readcard_ntag()">
+                        <input type="button" value=" 轻松写Ntag2x卡，最多一次11页 " onclick="writecard_ntag()">
+                        <input type="button" value=" 轻松读15693卡，最多一次12页 " onclick="readcard_15693()">
+                        <input type="button" value=" 轻松写15693卡，最多一次12页 " onclick="writecard_15693()">
+                        <br />
+
+                        <div style="width:100%; float:left;">
+                            <div style="border-top: 2px solid #ff9800;padding: 2px 5px;color: #2196f3;">
+                                <input type="button" value="轻松读T5557卡" onclick="t5557_read()">
+                                <input type="button" value="轻松写T5557卡" onclick="t5557_write()">
+                                <input type="button" value="更改T5557卡密码" onclick="t5557_changekey()">
+                                <span style="vertical-align:middle">T5557读、写块地址选择标识：</span>
+                                <input type="text" id="t5557block" value="1111111100000110" style="max-width: 9em;width:100%;float:none;margin-right:0px;padding:0px;vertical-align:middle;overflow:auto;">
+                            </div>
+                        </div>
+
+                        <div style="width:100%; float:left;border-top: 3px solid #eaebdc;"></div>
+
+                        <br />
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="width:100%; float:left;">
+
+                <table style="color:#e58800">
+
+                    <colgroup>
+                        <col width="20">
+                        <col width="auto">
+                    </colgroup>
+                    <tr>
+                        <td colspan="2">
+                            说明：
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td valign="top">
+                            1、
+                        </td>
+
+                        <td valign="top">
+                            <p>
+                                运行本例程前，需先在当前电脑下载安装我们的服务程序，并且运行该服务程序。
+                            </p>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            2、
+                        </td>
+
+                        <td valign="top">
+                            <p>
+                            <p>兼容360、搜狗、QQ、UC、猎豹、IE、Microsoft Edge、Google Chrome、Firefox火狐等浏览器。</p>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td valign="top">
+                            2、
+                        </td>
+
+                        <td valign="top">
+                            <p>
+                            <p>兼容http及https安全浏览协议。</p>
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,481 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls,declaredll,strutils, ComCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Edit1: TEdit;
+    Button6: TButton;
+    Edit2: TEdit;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    Label6: TLabel;
+    Edit3: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Edit4: TEdit;
+    Label9: TLabel;
+    Button8: TButton;
+    Button9: TButton;
+    GroupBox2: TGroupBox;
+    ComboBox1: TComboBox;
+    Label10: TLabel;
+    Edit5: TEdit;
+    Label11: TLabel;
+    Edit6: TEdit;
+    Label12: TLabel;
+    Edit7: TEdit;
+    Label13: TLabel;
+    Label14: TLabel;
+    Button10: TButton;
+    GroupBox3: TGroupBox;
+    Label15: TLabel;
+    Label16: TLabel;
+    ComboBox2: TComboBox;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Button11: TButton;
+    ComboBox3: TComboBox;
+    ComboBox4: TComboBox;
+    GroupBox4: TGroupBox;
+    Label3: TLabel;
+    Label17: TLabel;
+    ComboBox5: TComboBox;
+    Edit10: TEdit;
+    Button2: TButton;
+    ComboBox6: TComboBox;
+    Memo1: TMemo;
+    Label18: TLabel;
+    Edit11: TEdit;
+    Label19: TLabel;
+    Edit12: TEdit;
+    Label20: TLabel;
+    Button3: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+
+  end;
+
+const
+   NEWKEYR:byte=$0;  //更改只读密码
+   NEWKEYWR:byte=$1; //更改读写密码
+
+   OLDKEYR:byte = $0;  //用只读密码认证
+   OLDKEYWR:byte= $2; //用读写密码认证
+
+var
+  Form1: TForm1;
+  port,baud:integer;
+  procedure MsgInf(Errcode:byte);  // 自定义过程显示错误信息
+
+
+implementation
+
+{$R *.dfm}
+
+
+procedure MsgInf(Errcode:byte);                       //函数返回代码说明
+begin
+     case Errcode of
+          0: MessageDlg ('操作成功！',  mtCustom, [mbOK], 0);
+          8: showmessage('请重新拿开卡后再放到感应区!');
+          9: showmessage('读序列吗错误!');
+          10: showmessage('选卡错误!');
+          11: showmessage('装载密码错误!');
+          12: showmessage('密码认证错误!');
+          13: showmessage('读卡错误!');
+          14: showmessage('写卡错误!');
+
+          21: showmessage('没有动态库!');
+          22: showmessage('动态库或驱动程序异常!');
+          23: showmessage('驱动程序错误或尚未安装!');
+          24: showmessage('操作超时，一般是动态库没有反映!');
+          25: showmessage('发送字数不够!');
+          26: showmessage('发送的CRC错!');
+          27: showmessage('接收的字数不够!');
+          28: showmessage('接收的CRC错!');
+
+          50:showmessage('RATS错误，厂家调试代码，用户不需理会!');
+          51:showmessage('PPS错误，厂家调试代码，用户不需理会!');
+          52:showmessage('已进入了14443-4协议状态，可进行CPU卡功能所有操作了!');
+          53:showmessage('CPU卡功能通讯错误!');
+          54:showmessage('数据不足，需要接着发送未完成的数据至卡上!');
+          55:showmessage('发送ACK指令给卡，让卡接着发送数据回来!');
+          56:showmessage('清空根目录失败!');
+          57:showmessage('卡片不支持功能!');
+          58:showmessage('卡片初始化失败!');
+          59:showmessage('分配的空间不足!');
+          60:showmessage('本次操作的实体已存在!');
+          61:showmessage('无足够空间!');
+          62:showmessage('文件不存在!');
+          63:showmessage('权限不足,有可能是用只读密码认证，导致无法更改读写密码或无法写文件!');
+          64:showmessage('密码不存在，或密钥文件未创建!');
+          65:showmessage('传送长度错误!');
+          66:showmessage('Le错误，即接收的数据长度指定过大!');
+          67:showmessage('功能不支持或卡中无MF 或卡片已锁定!');
+          68:showmessage('密码认证错识次数过多，该密码已被锁死!');
+
+          86:showmessage('更改后的密码长度必须和创建时的长度一致!');
+          87:showmessage('应用目录不存在!');
+          88:showmessage('应用文件不存在!');
+          89:showmessage('文件号不能超过5!');
+          90:showmessage('读取文件时返回的长度不足，数据可能不正确!');
+          91:showmessage('一次读文件的长度不能超过255!');
+          92:showmessage('一次写文件的长度不能超过247!');
+          70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85:
+                showmessage('密码认证错误，剩余认证次数为：'+inttostr(Errcode-70)+'，如果为0，该密码将锁死，无法再认证！');
+          else
+          showmessage('异常错误代码：'+inttostr(Errcode));
+     end;
+end;
+
+
+procedure TForm1.Button1Click(Sender: TObject);
+//轻松读卡
+{
+技术支持：
+网站：
+}
+var
+
+    status:byte;//存放返回值
+    mycode:array[0..1] of byte;//卡数据缓冲
+    myver:array[0..1] of byte;//卡数据缓冲
+    mypiccserial:array[0..3] of byte;//卡序列号
+    mypram:array[0..3] of byte;//参数
+    cardhao:Cardinal; //无符号32bit的整型
+
+begin
+    status := cpurequest(@mypiccserial,@mypram,@myver,@mycode);
+        //处理返回函数
+    case status of
+         0,52:
+              begin
+                  cardhao:= mypiccserial[0]*256*256*256+mypiccserial[1]*256*256+mypiccserial[2]*256+mypiccserial[3];
+                  pcdbeep(50);
+                  edit2.Text :=RightStr('0000000000'+inttostr(cardhao),10);
+                  ShowMessage('复位CPU卡成功,CPU卡进入14443A-4的协议模式，可以接着重复操作第二步进行调试了。'+chr(13)+'卡号(16进制)：'+IntToHex(mypiccserial[0],2)+IntToHex(mypiccserial[1],2)+IntToHex(mypiccserial[2],2)+IntToHex(mypiccserial[3],2)+chr(13)+'参数(16进制)：'+IntToHex(mypram[0],2)+IntToHex(mypram[1],2)+IntToHex(mypram[2],2)+IntToHex(mypram[3],2)+chr(13)+'版本：'+inttohex(myver[0],2)+chr(13)+'厂商代码(复旦为90)：'+inttohex(mycode[0],2));
+               end;
+            8:
+               ShowMessage('请将卡放在感应区');
+          else
+               MsgInf(status);
+    end;
+
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+//轻松读卡
+{
+技术支持：
+网站：
+}
+var
+        devno:array[0..3] of byte;//设备编号
+begin
+
+        if pcdgetdevicenumber(@devno) = 0 then
+        begin
+          ShowMessage(IntToStr(devno[0]) + '-' + IntToStr(devno[1]) + '-' + IntToStr(devno[2]) + '-' + IntToStr(devno[3]));
+        end;
+
+
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+//让设备发出声音
+{
+技术支持：
+网站：
+}
+begin
+  pcdbeep(50);
+end;
+
+
+procedure TForm1.Button6Click(Sender: TObject);
+begin
+  lcddispfull(PChar(Edit1.Text));
+end;
+
+procedure TForm1.Button8Click(Sender: TObject);
+var
+    strls2:String;
+    i:integer;
+    spacesize:integer;
+    keylen:Byte;//'密钥长度
+    keybuf:array[0..15] of  Byte;// '密钥
+    status: Byte;
+begin
+    strls2:=edit4.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        keybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+    spacesize:=strtoint(Edit3.text);
+    if spacesize<1 then
+    begin
+        Edit3.SetFocus;
+        showmessage('应用空间大小为0，请重新输入！');
+        exit;
+    end;
+    if CheckBox1.Checked then i:=1 else i:=0;
+    status:=cpursinit(i, @keybuf, 16, spacesize);
+    case status of
+         0:
+           begin
+               pcdbeep(50);
+               showmessage('初始化卡成功!');
+           end;
+         else
+           MsgInf(status);
+    end;
+end;
+
+procedure TForm1.Button10Click(Sender: TObject);
+var
+    strls2:String;
+    i:integer;
+    spacesize:integer;
+    readkeylen:Byte;//'只读密钥长度
+    writkeylen:Byte;//'读写密钥长度
+    readkeybuf:array[0..15] of  Byte;// '只读密钥
+    writkeybuf:array[0..15] of  Byte;// '读写密钥
+
+    status: Byte;
+begin
+    strls2:=edit5.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        readkeybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+    strls2:=edit6.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        writkeybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+    spacesize:=strtoint(Edit7.text);
+    if spacesize<1 then
+    begin
+        Edit7.SetFocus;
+        showmessage('文件空间大小为0，请重新输入！');
+        exit;
+    end;
+
+    i:=ComboBox1.ItemIndex; //文件号
+
+    status:=cpursfileadd(i, @readkeybuf, 16,@writkeybuf, 16, spacesize);
+    case status of
+         0:
+           begin
+               pcdbeep(50);
+               showmessage(ComboBox1.Text+'创建文件成功!');
+           end;
+         60:
+           showmessage(ComboBox1.Text+'已经存在，不能再次创建!');
+         else
+            MsgInf(status);
+    end;
+end;
+
+
+
+procedure TForm1.Button11Click(Sender: TObject);
+var
+    strls2:String;
+    i:integer;
+    keytype:byte;
+    readkeylen:Byte;//'认证密钥长度
+    writkeylen:Byte;//'新密钥长度
+    readkeybuf:array[0..15] of  Byte;// '认证密钥
+    writkeybuf:array[0..15] of  Byte;// '新密钥
+
+    status: Byte;
+begin
+    strls2:=edit8.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        readkeybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+    strls2:=edit9.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        writkeybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+    i:=ComboBox2.ItemIndex; //文件号
+
+    //需要更改的密码类型
+    if combobox4.ItemIndex =0 then   keytype:=NEWKEYR else keytype:=NEWKEYWR;
+
+    //用来认证的密码类型
+    if combobox3.ItemIndex =0 then   keytype:=keytype+OLDKEYR else keytype:=keytype+OLDKEYWR;
+
+    status:=cpursfilekeychg(i,keytype, @readkeybuf, 16,@writkeybuf, 16);
+    case status of
+         0:
+           begin
+               pcdbeep(50);
+               showmessage(ComboBox3.Text+'修改文件密码成功!');
+           end;
+         else
+            MsgInf(status);
+    end;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var
+    strls2:String;
+    i:integer;
+    keytype:byte;
+    
+    datastart:integer;
+
+    readkeylen:Byte;//'认证密钥长度
+    readkeybuf:array[0..15] of  Byte;// '认证密钥
+
+    datalen:integer;//'文件长度
+    databuf:array[0..1023] of  Byte;// '文件内容
+
+    status: Byte;
+begin
+    strls2:=edit10.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        readkeybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+
+    i:=ComboBox5.ItemIndex; //文件号
+
+    datastart:=strtoint(Edit11.text);
+    if datastart<0 then
+    begin
+        Edit11.SetFocus;
+        showmessage('文件起始地址不能小于0，请重新输入！');
+        exit;
+    end;
+
+    datalen:=strtoint(Edit12.text);
+    if ((datalen<1) or (datalen>255))  then
+    begin
+        Edit12.SetFocus;
+        showmessage('本次读取的长度不能小于1,也不能大于255，请重新输入！');
+        exit;
+    end;
+
+    //用来认证的密码类型
+    if combobox6.ItemIndex =0 then   keytype:=OLDKEYR else keytype:=OLDKEYWR;
+
+    status:=cpursfiledataread(i,keytype, @readkeybuf, 16,datastart, @databuf,datalen);
+    case status of
+         0:
+           begin
+               strls2:='';
+               for i:=0 to datalen-1  do
+               begin
+                  strls2:=strls2+IntToHex(databuf[i],2)+' ';
+               end;
+               memo1.Text :=strls2;
+               showmessage('读取:'+ComboBox5.Text+' 内容成功!');
+           end;
+         else
+             memo1.Text :='';
+            MsgInf(status);
+    end;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var
+    strls2:String;
+    i:integer;
+    keytype:byte;
+    
+    datastart:integer;
+
+    readkeylen:Byte;//'认证密钥长度
+    readkeybuf:array[0..15] of  Byte;// '认证密钥
+
+    datalen:integer;//'文件长度
+    databuf:array[0..1023] of  Byte;// '文件内容
+
+    status: Byte;
+begin
+    strls2:=edit10.Text+'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF';
+    FOR i:=0 TO 15 DO
+    Begin
+        readkeybuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+    datastart:=strtoint(Edit11.text);
+    if datastart<0 then
+    begin
+        Edit11.SetFocus;
+        showmessage('文件起始地址不能小于0，请重新输入！');
+        exit;
+    end;
+
+    datalen:=strtoint(Edit12.text);
+    if ((datalen<1) or (datalen>247))  then
+    begin
+        Edit12.SetFocus;
+        showmessage('本次写数据长度不能小于1,也不能大于247，请重新输入！');
+        exit;
+    end;
+
+    strls2:=trim(memo1.Text);       //写文件内宅
+    for i:=0 to 246 do
+    begin
+       strls2:=strls2+'00 ';
+    end;
+    for i:=0 to datalen-1 do
+    begin
+        databuf[i]:=strtoint('$'+midstr(strls2,i*3+1,2));
+    end;
+
+    i:=ComboBox5.ItemIndex; //文件号
+
+    //用来认证的密码类型
+    if combobox6.ItemIndex =0 then   keytype:=OLDKEYR else keytype:=OLDKEYWR;
+
+    status:=cpursfiledatawrite(i,keytype, @readkeybuf, 16,datastart, @databuf,datalen);
+    case status of
+         0:
+           begin
+               pcdbeep(50);
+               showmessage('写数据到:'+ComboBox5.Text+' 成功!');
+           end;
+         else
+            MsgInf(status);
+    end;
+
+end;
+
+end.

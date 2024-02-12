@@ -1,0 +1,667 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网页轻松读写NDEF标签</title>
+
+    <script language="javascript">
+
+        var iswsrun = false;
+        var ws;
+        var received_msg = "";
+
+        var mytimer;
+        var strls = "";
+        var errorno = "";
+
+        var wsUri = "ws://127.0.0.1:39189";   //端口号必须与RFIDWebServer端口一致
+
+        function beep() {				 //驱动发卡器响声
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+            text.value = "";		
+            WebSocketRun("pcdbeep,30");					
+        }
+		
+		function MapCoordinate(){		//申请写入NDEF地图坐标
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+			text.value = "";
+			address=map_add.value;		        //地址
+			latitude=map_latitude.value;		//纬度
+			longitude=map_longitude.value;		//经度
+			WebSocketRun("NDEF_Map_coordinates,"+address+","+latitude+","+longitude);			
+		}
+		
+		function CallingTelephone(){	//写入呼叫电话
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+			text.value = "";
+			TeleNum=callnum.value;      //呼叫的电话号码
+			WebSocketRun("NDEF_Call_Telephone,"+TeleNum);
+		}
+
+		function SmartPoster(){		//写智能海报
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+			text.value = "";
+			titlestr=title.value;					//标题
+			uriheader=String(prefix.selectedIndex);	//前缀
+			uriinfo=uristr.value;					//uri链接
+			Sendinfstr ="NDEF_SmartPoster,"+titlestr+","+uriheader+","+uriinfo;			
+			WebSocketRun(Sendinfstr);
+		}
+		
+		function AddBluetooth(){			//写蓝牙设备连接控制标签
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令							
+			text.value = "";
+			blenamestr=Devicename.value;  //蓝牙设备名称
+			blemacstr=macstr.value;       //设备MAC地址
+			WebSocketRun("NDEF_AddBluetooth,"+blenamestr+","+blemacstr);
+		}
+		
+		function AddWifi(){  			//写WIFI无线热点连接控制标签
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+			text.value = "";
+			ssidstr=ssidname.value;		//wifi热点名称
+			authtype=String(authen.selectedIndex);	//认证方式
+			crypttype=String(algorithm.selectedIndex);	//加密算法
+			keystr=passw.value;	//wifi密码
+			WebSocketRun("NDEF_AddWifi,"+ssidstr+","+authtype+","+crypttype+","+keystr);
+		}
+		
+		function AddBusinessCard(){		//写电子名片
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令					
+			text.value = "";
+			infostr= "BEGIN:VCARD"+","; 
+			infostr = infostr + "VERSION:3.0" + ",";
+			infostr = infostr + "FN:" +namestr.value  + ",";    //姓名
+            infostr = infostr + "TEL:" + telstr.value + ",";    //电话
+            infostr = infostr + "ORG:" + groupstr.value + ",";  //单位名称
+            infostr = infostr + "ADR:" + addstr.value  +",";    //地址
+            infostr = infostr + "EMAIL:" + emailstr.value  +",";//邮箱
+            infostr = infostr + "URL:" + urlstr.value + ",";    //官网
+			infostr = infostr + "END:VCARD" ;
+			WebSocketRun("NDEF_AddBusinessCard,"+infostr);
+		}
+		
+		function AddApp(){		//写启动APP应用程序控制标签
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令						
+			text.value = "";
+			packagestr=appname.value;   //要启动的APP名称
+			WebSocketRun("NDEF_AddApp,"+packagestr);
+		}
+		
+		function AddData(){		//写数据类型标签
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令							
+			text.value = "";
+			ndeftypestr=datatype.value;		//数据类型名称
+			ndefdatastr=datastr.value;      //数据
+			WebSocketRun("NDEF_AddData,"+ndeftypestr+","+ndefdatastr); 
+		}
+		
+		function AddText(){		//写纯文本标签
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令								
+			text.value = "";
+			ndeftextstr=text5.value;		//文本信息			
+			WebSocketRun("NDEF_AddText,"+ndeftextstr); 	
+		}
+		
+		function ClearNdef(){
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+			text.value = "";
+			WebSocketRun("NDEF_Clear,"); 	
+		}
+
+		function ReadNdef(){				
+			buttonDisable();	// 删除 onclick 属性，防止重复执行指令				
+			text.value = "";
+			readinfo.value="";
+			WebSocketRun("NDEF_ReadInfo,"); 	
+		}
+		
+		function SelectApp(){
+			switch(qz4.selectedIndex){
+				case 0:
+						appname.value="com.tencent.mobileqq";
+						break;
+				case 1:
+						appname.value="com.android.mms";
+						break;
+				case 2:
+						appname.value="com.android.camera";
+						break;
+				case 3:
+						appname.value="com.tencent.mm";
+						break;
+				case 4:
+						appname.value="com.alibaba.android.rimet";
+						break;
+				case 5:
+						appname.value="com.taobao.taobao";
+						break;
+				case 6:
+						appname.value="com.taobao.qianniu";
+						break;
+				case 7:
+						appname.value="com.fcbox.hiveconsumer";
+						break;
+				case 8:
+						appname.value="com.eg.android.AlipayGphone";
+						break;
+				case 9:
+						appname.value="com.android.contacts";
+						break;
+				case 10:
+						appname.value="com.baidu.BaiduMap";
+						break;
+				case 11:
+						appname.value="com.kugou.android";
+						break;				
+				case 12:
+						appname.value="com.cebbank.mobile.cemb";
+						break;
+				case 13:
+						appname.value="com.netease.newsreader.activity";
+						break;
+				case 14:
+						appname.value="com.icbc";
+						break;																											
+			}
+		}
+		
+		function buttonDisable(){
+			document.getElementById("butt_beep").onclick = null;		
+			document.getElementById("butt_map").onclick = null;	
+			document.getElementById("butt_call").onclick = null;
+			document.getElementById("butt_smart").onclick = null;
+			document.getElementById("butt_blue").onclick = null;
+			document.getElementById("butt_wifi").onclick = null;
+			document.getElementById("butt_card").onclick = null;
+			document.getElementById("butt_app").onclick = null;
+			document.getElementById("butt_data").onclick = null;
+			document.getElementById("butt_text").onclick = null;
+			document.getElementById("butt_clear").onclick = null;
+			document.getElementById("butt_read").onclick = null;
+		}
+		
+		function buttonEn(){  //恢复各button 的onclick事件
+			document.getElementById("butt_beep").setAttribute("onclick", "beep()");			
+			document.getElementById("butt_map").setAttribute("onclick", "MapCoordinate()");		
+			document.getElementById("butt_call").setAttribute("onclick", "CallingTelephone()");
+			document.getElementById("butt_smart").setAttribute("onclick", "SmartPoster()");	
+			document.getElementById("butt_blue").setAttribute("onclick", "AddBluetooth()");
+			document.getElementById("butt_wifi").setAttribute("onclick", "AddWifi()");
+			document.getElementById("butt_card").setAttribute("onclick", "AddBusinessCard()");
+			document.getElementById("butt_app").setAttribute("onclick", "AddApp()");
+			document.getElementById("butt_data").setAttribute("onclick", "AddData()");
+			document.getElementById("butt_text").setAttribute("onclick", "AddText()");
+			document.getElementById("butt_clear").setAttribute("onclick", "ClearNdef()");
+			document.getElementById("butt_read").setAttribute("onclick", "ReadNdef()");
+		}
+
+		function DispErrInfo(Errcode){
+			var errstr = "";
+            switch (Errcode) {
+                case "ReturnCode:001":				
+                    errstr = "，读写扇区数据失败！";
+                    break;
+                case "ReturnCode:002":
+                    errstr = "，读写1、2块数据失败！";
+                    break;
+                case "ReturnCode:003":
+                    errstr = "，读写第2块数据失败！";
+                    break;
+                case "ReturnCode:008":
+                    errstr = "，未寻到卡，请将卡放到发卡器的感应区！";
+                    break;
+                case "ReturnCode:009":
+                    errstr = "，有多张卡在感应区，寻卡过程中防冲突失败，读卡失败！";
+                    break;
+                case "ReturnCode:010":
+                    errstr = "，该卡可能已被休眠，无法选中卡片！";
+                    break;
+                case "ReturnCode:011":
+                    errstr = "，密码装载失败！";
+                    break;
+                case "ReturnCode:012":
+                    errstr = "，卡密码认证失败！";
+                    break;
+                case "ReturnCode:013":
+                    errstr = "，读块操作失败，原因是刷卡太快或本块所对应的区还没通过密码认证！";
+                    break;
+                case "ReturnCode:014":
+                    errstr = "，写块操作失败，原因是刷卡太快或本块所对应的区还没通过密码认证！";
+                    break;
+                case "ReturnCode:018":
+                    errstr = "，写块操作失败！";
+                    break;
+                case "ReturnCode:021":
+                    errstr = "，没有动态库！";
+                    break;
+                case "ReturnCode:022":
+                    errstr = "，动态库或驱动程序异常！";
+                    break;
+                case "ReturnCode:023":
+                    errstr = "，驱动程序错误或发卡器未连接！";
+                    break;
+                case "ReturnCode:024":
+                    errstr = "，操作超时，一般是动态库没有反映！";
+                    break;
+                case "ReturnCode:025":
+                    errstr = "，发送字数不够！";
+                    break;
+                case "ReturnCode:026":
+                    errstr = "，发送的CRC错！";
+                    break;
+                case "ReturnCode:027":
+                    errstr = "，接收的字数不够！";
+                    break;
+                case "ReturnCode:028":
+                    errstr = "，接收的CRC错！";
+                    break;
+                case "ReturnCode:029":
+                    errstr = "，函数输入参数格式错误！";
+                    break;
+				case "ReturnCode:045":
+                    errstr = "，此卡不支持更改UID号或UID块已被锁定！";
+                    break;
+                case "ReturnCode:046":
+                    errstr = "，信息过大，标签容量不足！";
+                    break;
+                case "ReturnCode:057":
+                    errstr = "，卡片不支持Forum_Type4协议，可能不是Forum_Type4_Tag卡！";
+                    break;
+                case "ReturnCode:444":
+                    errstr = "，RFIDWebServer系统文件错误！";
+                    break;
+                case "ReturnCode:555":
+                    errstr = "，未发现有效的NFC标签！";
+                    break;					
+                default:
+                    errstr = "，未知的错误！";
+            }
+            return errstr;
+		}
+
+        window.onerror = function (e) {
+            alert("不好意思，出错了!");
+            return true;//屏蔽系统事件
+        }
+
+        function timeoutevent() {
+            ws.close();
+            CardIDShowerdev.value = "websockket返回超时";			
+        }
+
+        //websockket数据处理
+        function WebSocketRev(evt) {			
+            clearTimeout(mytimer);
+            received_msg = evt.data;
+            ws.close();
+
+            //在这里解析返回数据			            		
+            var strlist = received_msg.split(",");
+            if (strlist.length > 1) {
+                var dispstr = "";
+                switch (strlist[0]) {
+                    case "pcdbeep":
+                        dispstr = "函数名称:" + strlist[0] + "\r\n";
+                        if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ ",已执行蜂鸣响声操作！\r\n"
+                        } else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+                        text.value = dispstr;
+                        break;
+					case "NDEF_Map_coordinates":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写NDEF地图坐标标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;
+						break;	
+					case "NDEF_Call_Telephone":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写NDEF呼叫电话标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;	
+					case "NDEF_SmartPoster":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写NDEF智能海报标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;		
+					case "NDEF_AddBluetooth":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写蓝牙连接NDEF控制标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;	
+					case "NDEF_AddWifi":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写WIFI无线连接NDEF控制标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;		
+					case "NDEF_AddBusinessCard":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写NDEF电子名片标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;		
+					case "NDEF_AddApp":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写启动APP程序NDEF控制标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;		
+					case "NDEF_AddData":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写NDEF数据标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;	
+					case "NDEF_AddText":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",写NDEF文本标签成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;							
+					case "NDEF_Clear":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",清除NDEF标签信息成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;						
+						break;	
+					case "NDEF_ReadInfo":
+						dispstr = "函数名称:" + strlist[0] + "\r\n";
+						if (strlist[1] == "ReturnCode:000") {
+                            dispstr = dispstr +"操作结果:" + strlist[1]+ ",读取NDEF标签信息成功！\r\n";
+                            dispstr = dispstr +"标签类型:"+strlist[2]+ "\r\n";;
+							dispstr = dispstr +"标签号码:"+strlist[3];
+						}else {
+                            dispstr = dispstr + "操作结果:" + strlist[1]+ DispErrInfo(strlist[1]);
+                        }
+						text.value = dispstr;	
+						var ndefstr="";
+						for(var i=4;i<strlist.length;i++){
+							ndefstr=ndefstr+strlist[i];
+							if(i<strlist.length-1){
+								ndefstr=ndefstr+",";
+							}
+						}
+						readinfo.value=	ndefstr;				
+						break;																								
+                }
+            } 
+			buttonEn();  //恢复按键的onclick事件
+        }
+
+        function WebSocketRun(sendinfo) {
+            iswsrun = false;
+
+            try {
+                if ("WebSocket" in window) {
+                    ws = new WebSocket(wsUri);
+                }
+                else if ("MozWebSocket" in window) {
+                    ws = new MozWebSocket(wsUri);
+                }
+                else {
+                    received_msg = "您的浏览器不支持WebSocket，请选用支持WebSocket的浏览器！";
+                    return;
+                }
+
+                clearTimeout(mytimer);
+
+                ws.onopen = function (evt) {
+                    ws.send(sendinfo);
+                    iswsrun = true;
+										
+					if (sendinfo=='NDEF_Clear,'){
+                    	mytimer = setTimeout("timeoutevent()", 5000);	//清除标签的时间要长
+					} else{ mytimer = setTimeout("timeoutevent()", 2000);}						
+                };
+
+                ws.onmessage = WebSocketRev;	
+				
+                ws.onerror = function (e) {
+                    if (iswsrun != true) {
+                        received_msg = "请先在当前电脑下载>安装>运行我们的服务程序......";
+                        window.open("http://www.bossknow.cn/DownLoads/RFIDWebServerSetup.exe", "top");//打开新窗口
+
+                        alert("请先下载>安装>运行我们的服务程序，再刷新本页面......");
+                    }
+                };																
+										
+            }
+            catch (ex) {
+                if (iswsrun != true) {
+                    received_msg = "请先在当前电脑下载>安装>运行我们的服务程序......";
+                    window.open("http://www.bossknow.cn/DownLoads/RFIDWebServerSetup.exe", "top");//打开新窗口
+
+                    alert("请先下载>安装>运行我们的服务程序，再刷新本页面......");
+                }
+            }
+        }
+
+
+
+    </script>
+
+<style type="text/css">
+body,td,th {
+	color: #000000;
+	background-color: #FFF;
+}
+body {
+	background-color: #FFF;
+	background-image: none;
+}
+</style>
+</head>
+
+<body>
+<table width="1107" border="1">
+  <tr>
+    <th width="100" height="73" scope="row"><input type="submit" name="butt_beep" id="butt_beep" value="驱动发卡器响声" onclick="beep()" /></th>
+    <td width="1463"><textarea name="returninfo" id="text" cols="140" rows="5"></textarea></td>
+  </tr>
+  <tr>
+    <th height="36" scope="row"><input type="submit" name="butt_map" id="butt_map" value="写入地图坐标" onclick="MapCoordinate()"/></th>
+    <td>地址名称：
+      <label for="map_add"></label>
+    <input name="map_add" type="text" id="map_add" value="北京天安门广场" />
+    纬度:
+    <label for="map_longitude"></label>
+    <input name="map_latitude" type="text" id="map_latitude" value="39.906922" />
+    经度：
+    <label for=""></label>
+    <input name="map_longitude" type="text" id="map_longitude" value="116.389027" /></td>
+  </tr>
+  <tr>
+    <th height="39" scope="row"><input type="submit" name="butt_call" id="butt_call" value="写入呼叫电话" onclick="CallingTelephone()"/></th>
+    <td>呼叫电话：
+      <label for="callnum"></label>
+    <input name="callnum" type="text" id="callnum" value="13800138000" /></td>
+  </tr>
+  <tr>
+    <th height="37" scope="row"><input type="submit" name="butt_smart" id="butt_smart" value="写入智能海报" onclick="SmartPoster()"/></th>
+    <td>标题：
+      <label for="title"></label>
+    <input name="title" type="text" id="title" value="百度" />
+    前缀：
+    <label for="prefix"></label>
+    <select name="prefix" size="1" id="prefix">
+      <option>无前缀</option>
+      <option>http://www.</option>
+      <option selected="selected">https://www.</option>
+      <option>http://</option>
+      <option>https://</option>
+      <option>tel:</option>
+      <option>mailto:</option>
+      <option>ftp://anonymous:anonymous@</option>
+    </select>
+    <label for="uristr"></label>      <input name="uristr" type="text" id="uristr" value="baidu.com" size="65" />    </td>
+  </tr>
+  <tr>
+    <th height="40" scope="row"><input name="butt_blue" type="submit" id="butt_blue" onclick="AddBluetooth()" value="写入蓝牙连接" /></th>
+    <td>设备名称：
+      <label for="Devicename"></label>
+    <input name="Devicename" type="text" id="Devicename" value="PC45" />
+    蓝牙MAC地址：
+    <label for="macstr"></label>
+    <input name="macstr" type="text" id="macstr" value="21:f4:76:78:3a:b6" /></td>
+  </tr>
+  <tr>
+    <th height="40" scope="row"><input name="butt_wifi" type="submit" id="butt_wifi" onclick="AddWifi()" value="写入WIFI连接" /></th>
+    <td>热点名称：
+      <label for="ssidname"></label>
+    <input name="ssidname" type="text" id="ssidname" value="Xiaomi_E467" />
+    认证方式：
+    <select name="authen" size="1" id="authen">
+      <option>无</option>
+      <option>WPA个人</option>
+      <option>SHARED</option>
+      <option>WPA企业</option>
+      <option>MIXED</option>
+      <option>WPA2企业</option>
+      <option>WPA2个人</option>
+      <option selected="selected">WPA+WPA2个人</option>
+    </select>
+    加密算法：
+    <select name="algorithm" size="1" id="algorithm">
+      <option>无</option>
+      <option>WEP</option>
+      <option>TKIP</option>
+      <option>AES</option>
+      <option selected="selected">AES+TKIP</option>
+    </select>
+    密码：
+    <label for="passw"></label>
+    <input name="passw" type="text" id="passw" value="abcd#12345678." /></td>
+  </tr>
+  <tr>
+    <th height="60" scope="row"><input name="butt_card" type="submit" id="butt_card" onclick="AddBusinessCard()" value="写入电子名片" /></th>
+    <td><p>姓名：
+        <label for="namestr"></label>
+    <input name="namestr" type="text" id="namestr" value="张三丰" />
+    电话：
+    <label for="telstr"></label>
+    <input name="telstr" type="text" id="telstr" value="13800138000" />
+    公司名称：
+    <label for="groupstr">
+      <input name="groupstr" type="text" id="groupstr" value="广东省人民政府" />
+      邮箱：</label>
+    <label for="emailstr"></label>
+    <input name="emailstr" type="text" id="emailstr" value="123456789@qq.com" />
+    </p>
+    <p>网址：
+      <label for="urlstr"></label>
+      <input name="urlstr" type="text" id="urlstr" value="http://www.gd.gov.cn/" />
+      地址：
+      <label for="addstr"></label>
+      <input name="addstr" type="text" id="addstr" value="广州市越秀区东风中路305号" size="90" />
+    </p></td>
+  </tr>
+  <tr>
+    <th height="40" scope="row"><input name="butt_app" type="submit" id="butt_app" onclick="AddApp()" value="写入启动应用" /></th>
+    <td>App名称：
+      <label for="appname"></label>
+      <input name="appname" type="text" id="appname" value="com.tencent.mm" />
+<select name="qz4" size="1" id="qz4" onchange="SelectApp()">
+        <option value="com.tencent.mobileqq">QQ</option>
+        <option value="com.android.mms">短信</option>
+        <option value="com.android.camera">相机</option>
+        <option value="com.tencent.mm" selected="selected">微信</option>
+        <option value="com.alibaba.android.rimet">钉钉</option>
+        <option value="com.taobao.taobao">淘宝</option>
+        <option value="com.taobao.qianniu">千牛</option>
+        <option value="com.fcbox.hiveconsumer">丰巢</option>
+        <option value="com.eg.android.AlipayGphone">支付宝</option>
+        <option value="com.android.contacts">通讯录</option>
+        <option value="com.baidu.BaiduMap">百度地图</option>
+        <option value="com.kugou.android">酷狗音乐</option>
+        <option value="com.cebbank.mobile.cemb">光大银行</option>
+        <option value="com.netease.newsreader.activity">网易新闻</option>
+        <option value="com.icbc">中国工商银行</option>
+    </select></td>
+  </tr>
+  <tr>
+    <th height="40" scope="row"><input name="butt_data" type="submit" id="butt_data" onclick="AddData()" value="写入数据类型" /></th>
+    <td>数据类型：
+      <label for="datatype"></label>
+    <input name="datatype" type="text" id="datatype" value="text/plain" />
+    数据：
+    <label for="datastr"></label>
+    <input name="datastr" type="text" id="datastr" value="0123456789" size="90" /></td>
+  </tr>
+  <tr>
+    <th height="37" scope="row"><input name="butt_text" type="submit" id="butt_text" onclick="AddText()" value="写入NDEF文本" /></th>
+    <td><textarea name="textinfo" id="text5" cols="140" rows="3">轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。</textarea></td>
+  </tr>
+  <tr>
+    <th height="116" scope="row"><p>
+      <input name="butt_read" type="submit" id="butt_read" onclick="ReadNdef()" value="读取NDEF标签" />
+    </p>
+    <p>&nbsp;      </p>
+    <p>
+      <input name="butt_clear" type="submit" id="butt_clear" onclick="ClearNdef()" value="清除NDEF标签" />
+    </p></th>
+    <td><textarea name="readinfo" id="readinfo" cols="140" rows="8"></textarea></td>
+  </tr>
+</table>
+<p>
+  <label for="readinfo"></label>
+  <label for="title"></label>
+</p>
+</body>
+</html>
+    </script>

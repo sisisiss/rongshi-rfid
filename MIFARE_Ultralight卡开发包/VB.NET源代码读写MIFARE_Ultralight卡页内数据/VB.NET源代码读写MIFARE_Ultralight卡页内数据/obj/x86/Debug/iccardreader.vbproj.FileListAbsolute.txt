@@ -1,0 +1,9 @@
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\bin\x86\Debug\iccardreader.exe
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\bin\x86\Debug\iccardreader.pdb
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\bin\x86\Debug\iccardreader.xml
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\obj\x86\Debug\iccardreader.Form1.resources
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\obj\x86\Debug\iccardreader.vbproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\obj\x86\Debug\iccardreader.exe
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\obj\x86\Debug\iccardreader.xml
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\obj\x86\Debug\iccardreader.pdb
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\Ultralight卡\VB.NET源代码读写MIFARE_Ultralight卡页内数据\obj\x86\Debug\iccardreader.Resources.resources

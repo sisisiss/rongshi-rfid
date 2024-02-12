@@ -1,0 +1,14 @@
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\bin\iccardreader.exe
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\bin\iccardreader.xml
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\obj\Release\iccardreader.Form1.resources
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\obj\Release\iccardreader.Resources.resources
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\obj\Release\iccardreader.vbproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\obj\Release\iccardreader.exe
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\obj\Release\iccardreader.xml
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\obj\Release\iccardreader.exe
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\obj\Release\iccardreader.xml
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\bin\iccardreader.exe
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\bin\iccardreader.xml
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\obj\Release\iccardreader.Form1.resources
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\obj\Release\iccardreader.Resources.resources
+F:\荣士标准软件包大全\Ntag21x标签读写示例\NTAG21x芯片读写VB.NET示例源码\obj\Release\iccardreader.vbproj.GenerateResource.Cache

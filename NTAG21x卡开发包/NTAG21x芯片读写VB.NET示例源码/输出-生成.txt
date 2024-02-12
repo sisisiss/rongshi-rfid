@@ -1,0 +1,9 @@
+﻿------ 已启动全部重新生成:  项目: iccardreader, 配置: Debug Any CPU ------
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\Module1.vb(44) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\Module1.vb(45) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\Module1.vb(46) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\Module1.vb(47) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\Module1.vb(48) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\Module1.vb(49) : warning BC42020: 变量声明没有“As”子句；假定为 Object 类型。
+  iccardreader -> E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\NTAG21x卡\VB.NET源代码读写NTAG21x卡页内数据\bin\iccardreader.exe
+========== 全部重新生成:  成功 1 个，失败 0 个，跳过 0 个 ==========

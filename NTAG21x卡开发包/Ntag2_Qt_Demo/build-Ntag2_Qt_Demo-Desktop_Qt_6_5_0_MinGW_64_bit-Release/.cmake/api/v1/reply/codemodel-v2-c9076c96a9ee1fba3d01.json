@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-5ad10a3f964fd05cd671.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Ntag2_Qt_Demo",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Ntag2_Qt_Demo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Ntag2_Qt_Demo-Release-70d93bb8c3129e7f7ce5.json",
+					"name" : "Ntag2_Qt_Demo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Ntag2_Qt_Demo_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Ntag2_Qt_Demo_autogen-Release-c500126ebced27c27e03.json",
+					"name" : "Ntag2_Qt_Demo_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Ntag2_Qt_Demo_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Ntag2_Qt_Demo_autogen_timestamp_deps-Release-6ab46358d078a792a045.json",
+					"name" : "Ntag2_Qt_Demo_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Release",
+		"source" : "H:/Ntag2_Qt_Demo/Ntag2_Qt_Demo"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

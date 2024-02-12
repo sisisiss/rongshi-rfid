@@ -1,0 +1,10 @@
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\bin\x86\Release\iccardreader.exe.config
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\Interop.ICCARDREADERLib.dll
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\iccardreader.csproj.ResolveComReference.cache
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\bin\x86\Release\iccardreader.exe
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\bin\x86\Release\iccardreader.pdb
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\WindowsFormsApplication1.Form1.resources
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\WindowsFormsApplication1.Properties.Resources.resources
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\iccardreader.csproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\iccardreader.exe
+E:\荣士标准软件包大全150418\IC-01USB有驱型读写器开发包\MifareOne卡\最新示例\c#2012x64\iccardreaderx64\iccardreader\obj\x86\Release\iccardreader.pdb

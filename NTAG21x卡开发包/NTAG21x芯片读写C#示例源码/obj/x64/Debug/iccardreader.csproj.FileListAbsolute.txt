@@ -1,0 +1,8 @@
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\bin\x64\Debug\iccardreader.exe.config
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\bin\x64\Debug\iccardreader.exe
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\bin\x64\Debug\iccardreader.pdb
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\obj\x64\Debug\WindowsFormsApplication1.Form1.resources
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\obj\x64\Debug\WindowsFormsApplication1.Properties.Resources.resources
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\obj\x64\Debug\iccardreader.csproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\obj\x64\Debug\iccardreader.exe
+E:\荣士标准软件包大全150418\第二代读写器\免驱动\NTAG21x系列卡开发示例\C#源代码读写NTAG21x卡页内数据\obj\x64\Debug\iccardreader.pdb

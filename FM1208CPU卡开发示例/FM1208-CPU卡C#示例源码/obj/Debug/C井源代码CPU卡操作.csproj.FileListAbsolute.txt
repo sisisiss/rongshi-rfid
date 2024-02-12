@@ -1,0 +1,9 @@
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\bin\Debug\C井源代码CPU卡操作.exe.config
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\bin\Debug\C井源代码CPU卡操作.exe
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\bin\Debug\C井源代码CPU卡操作.pdb
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\obj\Debug\C井源代码CPU卡操作.Form1.resources
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\obj\Debug\C井源代码CPU卡操作.Form2.resources
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\obj\Debug\C井源代码CPU卡操作.Properties.Resources.resources
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\obj\Debug\C井源代码CPU卡操作.csproj.GenerateResource.Cache
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\obj\Debug\C井源代码CPU卡操作.exe
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡C#示例源码\obj\Debug\C井源代码CPU卡操作.pdb

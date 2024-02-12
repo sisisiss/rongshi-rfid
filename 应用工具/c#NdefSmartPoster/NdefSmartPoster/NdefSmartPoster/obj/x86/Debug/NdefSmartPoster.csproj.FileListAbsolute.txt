@@ -1,0 +1,8 @@
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\bin\x86\Debug\NdefSmartPoster.exe.config
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\bin\x86\Debug\NdefSmartPoster.exe
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\bin\x86\Debug\NdefSmartPoster.pdb
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\x86\Debug\NdefSmartPoster.Form1.resources
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\x86\Debug\NdefSmartPoster.Properties.Resources.resources
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\x86\Debug\NdefSmartPoster.csproj.GenerateResource.Cache
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\x86\Debug\NdefSmartPoster.exe
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\x86\Debug\NdefSmartPoster.pdb

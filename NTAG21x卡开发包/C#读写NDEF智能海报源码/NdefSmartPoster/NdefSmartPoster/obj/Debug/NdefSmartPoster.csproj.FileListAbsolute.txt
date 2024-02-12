@@ -1,0 +1,18 @@
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\bin\Debug\NdefSmartPoster.exe.config
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\bin\Debug\NdefSmartPoster.exe
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\bin\Debug\NdefSmartPoster.pdb
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.Form1.resources
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.Properties.Resources.resources
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.csproj.GenerateResource.Cache
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.exe
+H:\荣士标准软件包最新\IC-02 USB第二代免驱\c#智能海报NDEF标签\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.pdb
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\bin\Debug\NdefSmartPoster.exe.config
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\bin\Debug\NdefSmartPoster.exe
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\bin\Debug\NdefSmartPoster.pdb
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.csproj.AssemblyReference.cache
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.Form1.resources
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.Properties.Resources.resources
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.csproj.GenerateResource.cache
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.csproj.CoreCompileInputs.cache
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.exe
+F:\BaiduNetdiskDownload\第二代免驱IC卡读写器Windows开发包\NTAG21x卡开发包\C#读写NDEF智能海报源码\NdefSmartPoster\NdefSmartPoster\obj\Debug\NdefSmartPoster.pdb

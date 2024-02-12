@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6ae49e59-ee22-4aab-81db-4c3ea085489e" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1qKkVmF9Nq26134LaCD1tqtubFU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="File.Encoding" />
+  </component>
+  <component name="RunManager" selected="Application.M1CardReadWriteDemo">
+    <configuration name="ICReadWriteDemo" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="ICReadWriteDemo" />
+      <module name="ICReadWriteDemo" />
+      <option name="PROGRAM_PARAMETERS" value="2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="M1CardReadWriteDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="M1CardReadWriteDemo" />
+      <module name="ICReadWriteDemo" />
+      <option name="PROGRAM_PARAMETERS" value="2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.ICReadWriteDemo" />
+      <item itemvalue="Application.M1CardReadWriteDemo" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.M1CardReadWriteDemo" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6ae49e59-ee22-4aab-81db-4c3ea085489e" name="Default Changelist" comment="" />
+      <created>1616835694425</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1616835694425</updated>
+      <workItem from="1639105396970" duration="33000" />
+      <workItem from="1639105496294" duration="52000" />
+      <workItem from="1646461968988" duration="620000" />
+      <workItem from="1647657631163" duration="574000" />
+      <workItem from="1647658947686" duration="31000" />
+      <workItem from="1647659031840" duration="14000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="739" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1647658959648">
+      <screen x="0" y="0" width="2560" height="1036" />
+    </state>
+    <state x="739" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1036@0.0.2560.1036" timestamp="1647658959648" />
+    <state x="1064" y="277" key="FileChooserDialogImpl" timestamp="1639105546447">
+      <screen x="0" y="0" width="2560" height="1036" />
+    </state>
+    <state x="1064" y="277" key="FileChooserDialogImpl/0.0.2560.1036@0.0.2560.1036" timestamp="1639105546447" />
+    <state width="2510" height="278" key="GridCell.Tab.0.bottom" timestamp="1647659044981">
+      <screen x="0" y="0" width="2560" height="1036" />
+    </state>
+    <state width="2510" height="278" key="GridCell.Tab.0.bottom/0.0.2560.1036@0.0.2560.1036" timestamp="1647659044981" />
+    <state width="2510" height="278" key="GridCell.Tab.0.center" timestamp="1647659044980">
+      <screen x="0" y="0" width="2560" height="1036" />
+    </state>
+    <state width="2510" height="278" key="GridCell.Tab.0.center/0.0.2560.1036@0.0.2560.1036" timestamp="1647659044980" />
+    <state width="2510" height="278" key="GridCell.Tab.0.left" timestamp="1647659044980">
+      <screen x="0" y="0" width="2560" height="1036" />
+    </state>
+    <state width="2510" height="278" key="GridCell.Tab.0.left/0.0.2560.1036@0.0.2560.1036" timestamp="1647659044980" />
+    <state width="2510" height="278" key="GridCell.Tab.0.right" timestamp="1647659044981">
+      <screen x="0" y="0" width="2560" height="1036" />
+    </state>
+    <state width="2510" height="278" key="GridCell.Tab.0.right/0.0.2560.1036@0.0.2560.1036" timestamp="1647659044981" />
+  </component>
+</project>

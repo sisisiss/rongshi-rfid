@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>712</width>
+    <height>652</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ntag2_Qt_Demo</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pb_beep">
+    <property name="geometry">
+     <rect>
+      <x>7</x>
+      <y>8</y>
+      <width>140</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>驱动读写器发出响声</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_getdevnum">
+    <property name="geometry">
+     <rect>
+      <x>147</x>
+      <y>8</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>读出设备全球唯一的设备编号，作为加密狗用</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_uid">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>253</y>
+      <width>161</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>288</x>
+      <y>91</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>页开始有密码保护，</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_star">
+    <property name="geometry">
+     <rect>
+      <x>227</x>
+      <y>87</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>30</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>206</x>
+      <y>91</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>从</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>56</x>
+      <y>196</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>读写起始页地址：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>253</y>
+      <width>150</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>卡片全球唯一标识符UID：</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_num">
+    <property name="geometry">
+     <rect>
+      <x>614</x>
+      <y>115</y>
+      <width>70</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit_data">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>282</y>
+      <width>530</width>
+      <height>100</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>83</x>
+      <y>283</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>读写卡数据：</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkbox_sele">
+    <property name="geometry">
+     <rect>
+      <x>19</x>
+      <y>50</y>
+      <width>320</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>选择先认证卡密码再继续以下的读写卡操作，认证密码：</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_authkey">
+    <property name="geometry">
+     <rect>
+      <x>334</x>
+      <y>48</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>12345678</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_init">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>89</y>
+      <width>150</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <item>
+     <property name="text">
+      <string>开启卡片密码保护功能</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>取消卡片密码保护功能</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_readen">
+    <property name="geometry">
+     <rect>
+      <x>404</x>
+      <y>89</y>
+      <width>211</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>选择开启读操作密码保护，新密码：</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_newkey">
+    <property name="geometry">
+     <rect>
+      <x>613</x>
+      <y>87</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>12345678</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>112</x>
+      <y>119</y>
+      <width>501</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>允许密码认证错误次数，当密码认证失败次数大于设置值卡片将报废，0为不限制次数：</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_init">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>143</y>
+      <width>670</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>按以上参数 设置卡片认证密码及读写保护机制，新卡出厂时一般没有开启此机制可以直接读写。</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_easy_read">
+    <property name="geometry">
+     <rect>
+      <x>465</x>
+      <y>212</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>轻松读卡，每次最多可读取12页数据</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_star_rw">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>193</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>4</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_num_rw">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>223</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>11</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>96</x>
+      <y>226</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>读写页数：</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_easy_write">
+    <property name="geometry">
+     <rect>
+      <x>465</x>
+      <y>246</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>轻松写卡，每次最多可写入11页数据</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_request">
+    <property name="geometry">
+     <rect>
+      <x>427</x>
+      <y>387</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>读取卡片唯一标识符UID</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_read4page">
+    <property name="geometry">
+     <rect>
+      <x>428</x>
+      <y>418</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>从起始页开始读取连续的4个页数据</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_write1page">
+    <property name="geometry">
+     <rect>
+      <x>427</x>
+      <y>449</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>写1页数据</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_auth">
+    <property name="geometry">
+     <rect>
+      <x>428</x>
+      <y>480</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>认证卡片密码</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_getver">
+    <property name="geometry">
+     <rect>
+      <x>427</x>
+      <y>511</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>读取卡片的版本号及型号</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_getsign">
+    <property name="geometry">
+     <rect>
+      <x>427</x>
+      <y>542</y>
+      <width>260</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>读取卡片的签名信息，可验证卡是否NXP原厂</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_getcounter">
+    <property name="geometry">
+     <rect>
+      <x>427</x>
+      <y>573</y>
+      <width>261</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>读取卡片单向计数器值</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_staticlock">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>542</y>
+      <width>321</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>静态锁，锁定3-15页，锁死后数据无法再次修改</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_dynamiclock">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>576</y>
+      <width>321</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>动态锁，锁定16页以后的页，锁死后数据无法再次修改</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>471</x>
+      <y>183</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>常用指令</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>517</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>危险指令，请谨慎使用！</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>712</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,9 @@
+# ninja log v5
+2	2513	7171651257214143	Ntag2_Qt_Demo_autogen/timestamp	34867a9599804152
+2	2513	7171651257214143	Ntag2_Qt_Demo_autogen/mocs_compilation.cpp	34867a9599804152
+2	2513	7171651257214143	H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Release/Ntag2_Qt_Demo_autogen/timestamp	34867a9599804152
+2	2513	7171651257214143	H:/Ntag2_Qt_Demo/build-Ntag2_Qt_Demo-Desktop_Qt_6_5_0_MinGW_64_bit-Release/Ntag2_Qt_Demo_autogen/mocs_compilation.cpp	34867a9599804152
+2527	4956	7171651288621238	CMakeFiles/Ntag2_Qt_Demo.dir/main.cpp.obj	428fc89b91b2794d
+2513	5002	7171651289091344	CMakeFiles/Ntag2_Qt_Demo.dir/Ntag2_Qt_Demo_autogen/mocs_compilation.cpp.obj	1798b2ed94719f76
+2520	6828	7171651307345478	CMakeFiles/Ntag2_Qt_Demo.dir/mainwindow.cpp.obj	d4bed97f106e429a
+6829	7153	7171651310546189	Ntag2_Qt_Demo.exe	5cede242572a0ec5

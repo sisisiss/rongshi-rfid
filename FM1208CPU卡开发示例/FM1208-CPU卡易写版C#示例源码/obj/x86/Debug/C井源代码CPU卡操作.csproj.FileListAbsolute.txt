@@ -1,0 +1,50 @@
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.pdb
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form1.resources
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Properties.Resources.resources
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.csproj.GenerateResource.Cache
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.exe
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.pdb
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe.config
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form2.resources
+E:\公司产品资料分类\CPU卡读写器\C#源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.csprojResolveAssemblyReference.cache
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe.config
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.exe
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.pdb
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.pdb
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.csprojResolveAssemblyReference.cache
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form1.resources
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form2.resources
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Properties.Resources.resources
+H:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.csproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe.config
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.exe
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.pdb
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.pdb
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form1.resources
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form2.resources
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Properties.Resources.resources
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C#2010源代码CPU卡操作\C井源代码CPU卡操作\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.csproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe.config
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.exe
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\bin\Debug\C井源代码CPU卡操作.pdb
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form1.resources
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Form2.resources
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.Properties.Resources.resources
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.csproj.GenerateResource.Cache
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.exe
+E:\荣士标准软件包大全150418\IC-01C USB有驱型CPU卡读写器\读写卡测试程序及源代码\C井源代码CPU卡操作_易写版_不需要用公司的专用模块\C井源代码CPU卡操作\obj\x86\Debug\C井源代码CPU卡操作.pdb
+E:\荣士标准软件包大全150418\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\bin\Debug\C井源代码CPU卡操作.exe.config
+E:\荣士标准软件包大全150418\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.exe
+E:\荣士标准软件包大全150418\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.pdb
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\bin\Debug\C井源代码CPU卡操作.exe.config
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.exe
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.pdb
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\bin\Debug\C井源代码CPU卡操作.exe
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\bin\Debug\C井源代码CPU卡操作.pdb
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.Form1.resources
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.Form2.resources
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.Properties.Resources.resources
+F:\荣士标准软件包大全\FM1208CPU卡读写示例\FM1208-CPU卡易写版C#示例源码\obj\x86\Debug\C井源代码CPU卡操作.csproj.GenerateResource.Cache
